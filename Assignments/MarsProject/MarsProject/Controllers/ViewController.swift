@@ -9,7 +9,7 @@ import UIKit
 
 
 class ViewController: UIViewController {
-
+    
     // MARK: - Properties
     let tableView = UITableView()
     var postsArrayID = [Int]()
@@ -17,10 +17,12 @@ class ViewController: UIViewController {
     var marsItems = [MarsSingle]()
     var marsItemsAux = [MarsItemAux]()
     var marsItemsAux2 = [MarsItemAux2]()
-    let customRed = UIColor(displayP3Red: 179/255, green: 15/255, blue: 9/255, alpha: 0.50)
+    let customRed = UIColor(displayP3Red: 179/255, green: 15/255, blue: 9/255, alpha: 0.70)
     let customRedDark = UIColor(displayP3Red: 82/255, green: 4/255, blue: 4/255, alpha: 1)
     let customBlue = UIColor(displayP3Red: 9/255, green: 74/255, blue: 179/255, alpha: 1.0)
     let midGray = UIColor(displayP3Red: 145/255, green: 145/255, blue: 145/255, alpha: 0.4)
+    
+    let blueColor = UIColor(displayP3Red: 4/255, green: 55/255, blue: 138/255, alpha: 1.0)
     var favCount = 0
     var favArray = [Bool]()
     
@@ -99,7 +101,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-
+        
         let colorLightBlue2 = UIColor(red: 34/255, green: 108/255, blue: 227/255, alpha: 0.05)
         let colorDarkBlue2 = UIColor(red: 22/255, green: 77/255, blue: 166/255, alpha: 1.0)
         
@@ -107,62 +109,48 @@ class ViewController: UIViewController {
         var updatedFrame = self.navigationController!.navigationBar.bounds
         updatedFrame.size.height += 150
         gradientLayer.frame = updatedFrame
-        gradientLayer.colors = [colorLightBlue2.cgColor, colorDarkBlue2.cgColor]
+        gradientLayer.colors = [colorLightBlue2.cgColor, customRed.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0) // vertical gradient start
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0) // vertical gradient end
-
+        
         UIGraphicsBeginImageContext(gradientLayer.bounds.size)
         gradientLayer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
+        
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         self.navigationController!.navigationBar.setBackgroundImage(image, for: UIBarMetrics.default)
-       // self.tabBarController?.tabBar.tintColor = .white
+        // self.tabBarController?.tabBar.tintColor = .white
         
         // Navigation Bar:
-        navigationController?.navigationBar.backgroundColor = colorDarkBlue2
+        navigationController?.navigationBar.backgroundColor = blueColor
         navigationController?.navigationBar.shadowImage = colorDarkBlue2.as1ptImage()
         
         // Navigation Bar Text:
         navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-
-        if #available(iOS 13.0, *) {
-                let app = UIApplication.shared
-                let statusBarHeight: CGFloat = app.statusBarFrame.size.height
-
-                let statusbarView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: statusBarHeight - 10))
-            statusbarView.backgroundColor = colorDarkBlue2
-                view.addSubview(statusbarView)
-            } else {
-                let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
-                statusBar?.backgroundColor = colorDarkBlue2
-            }
         
-        print("UD value: \(theFavArray)")
+        if #available(iOS 13.0, *) {
+            let app = UIApplication.shared
+            let statusBarHeight: CGFloat = app.statusBarFrame.size.height
+            
+            let statusbarView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: statusBarHeight - 10))
+            statusbarView.backgroundColor = colorDarkBlue2
+            view.addSubview(statusbarView)
+        } else {
+            let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView
+            statusBar?.backgroundColor = colorDarkBlue2
+        }
+        
+        //  print("UD value: \(theFavArray)")
         
         setUpUI()
         setupTableView()
         
-       
-        let imageBG = UIImage(named: "space-1648267457129-5048")?.image(alpha: 0.55)
-        backGroundImageView.image = imageBG
-        backGroundImageView.contentMode = .scaleAspectFill
         
-        getDataFromAPI()
-        getDataFromNasaAPI()
-        
-        detailVC.delegate = self
-        
-        updateDataPersist()
-        
-        let textAttributesNav = [NSAttributedString.Key.foregroundColor:UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = textAttributesNav
-
     }
-
+    
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -178,6 +166,19 @@ class ViewController: UIViewController {
         backGroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         backGroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         backGroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        let imageBG = UIImage(named: "space-1648267457129-5048")?.image(alpha: 0.55)
+        backGroundImageView.image = imageBG
+        backGroundImageView.contentMode = .scaleAspectFill
+        
+        getDataFromNasaAPI()
+        
+        detailVC.delegate = self
+        
+        updateDataPersist()
+        
+        let textAttributesNav = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = textAttributesNav
     }
     
     private func setupTableView() {
@@ -193,40 +194,10 @@ class ViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-      }
-    
-    @objc private func getDataFromAPI() {
-        
-        let urlS = "https://jsonplaceholder.typicode.com/posts"
-        guard let url = URL(string: urlS) else { return }
-        
-        if postsArrayID.isEmpty {
-        URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
-            if let data = data {
-                
-                do {
-                    if let result = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
-                        for item in result {
-                            if let identifier = item["id"] as? Int, let title = item["title"] as? String {
-//                                print(identifier)
-                                self.postsArrayID.append(identifier)
-                                self.postsArrayTitle.append(title)
-                            }
-                        }
-                        DispatchQueue.main.async { [weak self] in
-                            self?.tableView.reloadData()
-                            self?.tableView.showsVerticalScrollIndicator = true
-                        }
-                    }
-                } catch (let error) {
-                    print(error.localizedDescription)
-                }
-            }
-        }).resume()
-        } else {return}
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    
+    private func updateFavCount() {
         favCount = 0
         theFavArray.forEach {
             let check = $0
@@ -235,10 +206,21 @@ class ViewController: UIViewController {
             }
         }
         if favCount > 0 {
-            title = "Favorited Items Count: \(favCount)"
+            title = "MarsExp - Favorited Items Count: \(favCount)"
         } else {
-            title = "No Items Favored"
+            title = "MarsExp - No Items Favored"
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if let index = self.tableView.indexPathForSelectedRow{
+            self.tableView.deselectRow(at: index, animated: true)
+        }
+        
+        updateFavCount()
+
         
     }
     
@@ -248,9 +230,9 @@ class ViewController: UIViewController {
     
     @objc private func getDataFromNasaAPI() {
         
-      
+        
         let newURL = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=Q9YNbzmt8C5OpY7L3MV4DHJhrdIGCbjx3tVWxRcf&sol=2000&page=1"
-      
+        
         guard let url = URL(string: newURL) else { return }
         
         let decoder = JSONDecoder()
@@ -297,17 +279,17 @@ class ViewController: UIViewController {
                         self?.tableView.reloadData()
                     }
                     
-                    print(item)
-                    print(self!.marsItems)
-                    print("----")
-                    print(self!.marsItems.count)
+                    //                    print(item)
+                    //                    print(self!.marsItems)
+                    //                    print("----")
+                    //                    print(self!.marsItems.count)
                 } catch let error {
                     print(error.localizedDescription)
                 }
                 
             }}.resume()
-
-                                   
+        
+        
     }
     
 }
@@ -329,12 +311,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                     updateDataPersist()
                 }
                 
-            cell.accessoryType = .checkmark
-            cell.tintColor = .red
+                cell.accessoryType = .checkmark
+                cell.tintColor = .red
             } else {
                 cell.accessoryType = .none
             }
-                
+            
             if row % 2 == 0 {
                 cell.backgroundColor = midGray  //UIColor(displayP3Red: 23/255, green: 23/255, blue: 176/255, alpha: 1.0)
                 cell.textLabel?.textColor = UIColor.white
@@ -350,6 +332,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
         }
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = customRed
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
         
     }
@@ -370,17 +357,17 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let imageView = UIImageView()
-           imageView.image = UIImage(named: "124582_mars")!
+        imageView.image = UIImage(named: "124582_mars")!
         let headerView = UIView()
         
         headerView.backgroundColor = customRedDark
-           headerView.addSubview(imageView)
-           imageView.translatesAutoresizingMaskIntoConstraints = false
-           imageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-           imageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
-           imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
-           imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
-           return headerView
+        headerView.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        return headerView
     }
     
     
@@ -419,8 +406,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    
-    
 }
 
 extension UIImage {
@@ -436,7 +421,7 @@ extension UIImage {
 extension ViewController: DetailViewControllerDelegate {
     func setStatus(_ status: Bool, name: String?, imageURL: String?, id: Int?) {
         
-     //   print("Status: \(status), Name: \(String(describing: name)), ImageURL: \(imageURL), id: \(id)")
+        //   print("Status: \(status), Name: \(String(describing: name)), ImageURL: \(imageURL), id: \(id)")
         
         
         if let localId = id, let localImageURL = imageURL {

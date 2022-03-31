@@ -23,6 +23,9 @@ class DetailViewController: UIViewController {
     var imgURL: String = ""
     var itemIndex: Int = 0
     
+    let customRed = UIColor(displayP3Red: 179/255, green: 15/255, blue: 9/255, alpha: 0.70)
+    let customGreen = UIColor(displayP3Red: 9/255, green: 214/255, blue: 12/255, alpha: 1.0)
+    
     weak var delegate: DetailViewControllerDelegate?
     var returnMasterVC: ((_ status: Bool, _ id: Int?, _ name: String?, _ imageURL: String?) -> Void)?
     
@@ -101,6 +104,9 @@ class DetailViewController: UIViewController {
 //        self?.returnMasterViewController()
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,12 +115,28 @@ class DetailViewController: UIViewController {
         backGroundImageView.image = image
         backGroundImageView.contentMode = .scaleAspectFill
         
+        title = "ID: \(id)"
         
         setUpUI()
         populateUI()
     }
     
     private func setUpUI() {
+    
+        let onColor  = customGreen
+        let offColor = UIColor.red
+
+//        let mSwitch = UISwitch(frame: CGRect.zero)
+        switchControl.isOn = true
+
+        /*For on state*/
+        switchControl.onTintColor = onColor
+
+        /*For off state*/
+        switchControl.tintColor = offColor
+        switchControl.layer.cornerRadius = switchControl.frame.height / 2.0
+        switchControl.backgroundColor = offColor
+        switchControl.clipsToBounds = true
         
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
@@ -179,10 +201,10 @@ class DetailViewController: UIViewController {
         backGroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         backGroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
-        nasaImageView.topAnchor.constraint(equalTo: switchControl.bottomAnchor, constant: 85.0).isActive = true
-        nasaImageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-        nasaImageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-        nasaImageView.heightAnchor.constraint(equalToConstant: 250.0).isActive = true
+        nasaImageView.topAnchor.constraint(equalTo: switchControl.bottomAnchor, constant: 25.0).isActive = true
+        nasaImageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 8.0).isActive = true
+        nasaImageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -8.0).isActive = true
+        nasaImageView.heightAnchor.constraint(equalToConstant: 400.0).isActive = true
      
         
     }
@@ -200,7 +222,7 @@ class DetailViewController: UIViewController {
         
         loadImage()
         
-        print("ID: \(id), ImageURL: \(imgURL)")
+   //     print("ID: \(id), ImageURL: \(imgURL)")
         
     }
     
@@ -224,6 +246,11 @@ class DetailViewController: UIViewController {
                 DispatchQueue.main.async { [self] in
                     self?.nasaImageView.image = UIImage(data: data)
                     self?.nasaImageView.contentMode = .scaleAspectFill
+                    
+                    self!.nasaImageView.layer.borderColor = UIColor.lightGray.cgColor
+                    self!.nasaImageView.layer.borderWidth = 2
+                    self!.nasaImageView.layer.cornerRadius = 15
+                    self!.nasaImageView.layer.masksToBounds = true
                 }
                 
                 
@@ -238,7 +265,7 @@ class DetailViewController: UIViewController {
         status = switchControl.isOn
         delegate?.setStatus(status, name: name, imageURL: imgURL, id: id)
         
-        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
             self?.navigationController?.popViewController(animated: true)
         }
     }
