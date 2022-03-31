@@ -54,21 +54,37 @@
 		D3C9053D27F2C3CC00CADB91 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D3C9053E27F3314E00CADB91 /* DetailViewController.swift */,
 				D3DE426C27EEC59B00CB4ADE /* ViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		D3DE425C27EEC59B00CB4ADE = {
+		D3C9056427F5274E00CADB91 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				D3C9056227F3903C00CADB91 /* MarsItemAux2.swift */,
 				D3C9056027F38EDA00CADB91 /* MarsItemAux.swift */,
-				D3C9053E27F3314E00CADB91 /* DetailViewController.swift */,
 				D3C9053B27F29CE500CADB91 /* MarsSingle.swift */,
 				D3C9053927F22A9500CADB91 /* NetworkError.swift */,
 				D3C9053727F2286400CADB91 /* MarsModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D3C9056527F5277C00CADB91 /* Views */ = {
+			isa = PBXGroup;
+			children = (
 				D3DE427C27EEC67100CB4ADE /* CustomTableViewCell.swift */,
+				D3DE427327EEC59E00CB4ADE /* LaunchScreen.storyboard */,
+				D3DE426E27EEC59B00CB4ADE /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D3DE425C27EEC59B00CB4ADE = {
+			isa = PBXGroup;
+			children = (
 				D3DE426727EEC59B00CB4ADE /* MarsProject */,
 				D3DE426627EEC59B00CB4ADE /* Products */,
 			);
@@ -85,12 +101,12 @@
 		D3DE426727EEC59B00CB4ADE /* MarsProject */ = {
 			isa = PBXGroup;
 			children = (
+				D3C9056527F5277C00CADB91 /* Views */,
+				D3C9056427F5274E00CADB91 /* Model */,
 				D3C9053D27F2C3CC00CADB91 /* Controllers */,
 				D3DE426827EEC59B00CB4ADE /* AppDelegate.swift */,
 				D3DE426A27EEC59B00CB4ADE /* SceneDelegate.swift */,
-				D3DE426E27EEC59B00CB4ADE /* Main.storyboard */,
 				D3DE427127EEC59E00CB4ADE /* Assets.xcassets */,
-				D3DE427327EEC59E00CB4ADE /* LaunchScreen.storyboard */,
 				D3DE427627EEC59E00CB4ADE /* Info.plist */,
 			);
 			path = MarsProject;
