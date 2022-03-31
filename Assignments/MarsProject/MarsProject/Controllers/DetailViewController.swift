@@ -15,6 +15,7 @@ protocol DetailViewControllerDelegate: AnyObject {
 
 class DetailViewController: UIViewController {
     
+    // MARK: - Property Declarations
     var name: String = ""
     var body: String = ""
     var status = false
@@ -25,6 +26,8 @@ class DetailViewController: UIViewController {
     weak var delegate: DetailViewControllerDelegate?
     var returnMasterVC: ((_ status: Bool, _ id: Int?, _ name: String?, _ imageURL: String?) -> Void)?
     
+    
+    // MARK: - UI Elements
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -51,22 +54,6 @@ class DetailViewController: UIViewController {
         return profileImageview
     }()
     
-    private lazy var action1 = UIAction { [weak self] _ in
-
-        print("Button Pressed...")
-        
-        self!.status = self!.switchControl.isOn
-        
-        self!.delegate?.setStatus(self!.status, name: self!.name, imageURL: self!.imgURL, id: self!.id)
-        // closure
-        self!.returnMasterVC?(self!.status, self!.id, self!.name, self!.imgURL)
-        
-        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
-            self?.navigationController?.popViewController(animated: true)
-        }
-        
-    }
-    
     private lazy var button: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.roundedRect, primaryAction: action1)
         button.setTitle("Save", for: UIControl.State.normal)
@@ -85,11 +72,7 @@ class DetailViewController: UIViewController {
         label.textAlignment = .left
         return label
     }()
-    
-    private lazy var switchAction: UIAction = UIAction { [weak self] _ in
-//        self?.returnMasterViewController()
-    }
-    
+  
     private lazy var switchControl: UISwitch = {
         let control = UISwitch(frame: .zero, primaryAction: switchAction)
         control.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +85,22 @@ class DetailViewController: UIViewController {
         backGroundImageView.backgroundColor = .lightGray
         return backGroundImageView
     }()
+    
+    
+    
+    //MARK: - Custom Methods
+    private lazy var action1 = UIAction { [weak self] _ in
+        
+        self!.status = self!.switchControl.isOn
+        
+        self!.delegate?.setStatus(self!.status, name: self!.name, imageURL: self!.imgURL, id: self!.id)
+            self?.navigationController?.popViewController(animated: true)
+    }
+    
+    private lazy var switchAction: UIAction = UIAction { [weak self] _ in
+//        self?.returnMasterViewController()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -141,15 +140,13 @@ class DetailViewController: UIViewController {
         self.navigationController!.navigationBar.tintColor = .white
             
         let boldAttribute = [
-              NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 18.0)!
-           ]
-           let regularAttribute = [
-              NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Light", size: 18.0)!
-           ]
-           let boldText = NSAttributedString(string: name, attributes: boldAttribute)
-           let regularText = NSAttributedString(string: " regular", attributes: regularAttribute)
-           let newString = NSMutableAttributedString()
-           newString.append(boldText)
+            NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 18.0)!
+        ]
+   
+        let boldText = NSAttributedString(string: name, attributes: boldAttribute)
+        //           let regularText = NSAttributedString(string: " regular", attributes: regularAttribute)
+        let newString = NSMutableAttributedString()
+        newString.append(boldText)
         
         nameLabel.attributedText = newString
         

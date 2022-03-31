@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    // MARK: - TableView
+    // MARK: - Properties
     let tableView = UITableView()
     var postsArrayID = [Int]()
     var postsArrayTitle = [String]()
@@ -28,26 +28,20 @@ class ViewController: UIViewController {
     
     let userDefaults = UserDefaults.standard
     
-//    private lazy var action1 = UIAction { [weak self] _ in
-////        self?.getImage()
-//    }
-//
-//    private lazy var action2 = UIAction { [weak self] _ in
-//        self?.getDataFromAPI()
-//    }
+    lazy var theFavArray = userDefaults.value(forKey: "favoredItemsArray") as? [Bool] ?? [Bool]()
+    
+    
     
     // MARK: - UI Elements
-//    private lazy var button: UIButton = {
-//        let button = UIButton(type: UIButton.ButtonType.roundedRect, primaryAction: action1)
-//        button.setTitle("Get Profile Image", for: UIControl.State.normal)
-//        button.backgroundColor = customBlue
-//        button.translatesAutoresizingMaskIntoConstraints = false
-////        button.setTitleColor(.white, for: .normal)
-////        button.setTitleColor(.orange, for: .selected)
-//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-//        return button
-//    }()
+    private let backGroundImageView: UIImageView = {
+        let backGroundImageView = UIImageView()
+        backGroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        backGroundImageView.backgroundColor = .darkGray
+        return backGroundImageView
+    }()
     
+    
+    // MARK: - Custom Methods
     private func updateDataPersist() {
         
         var check1 = 0
@@ -101,26 +95,6 @@ class ViewController: UIViewController {
         
     }
     
-    private let backGroundImageView: UIImageView = {
-        let backGroundImageView = UIImageView()
-        backGroundImageView.translatesAutoresizingMaskIntoConstraints = false
-        backGroundImageView.backgroundColor = .darkGray
-        return backGroundImageView
-    }()
-    
-//    private lazy var buttonAPI: UIButton = {
-//        let button = UIButton(type: UIButton.ButtonType.roundedRect, primaryAction: action2)
-//        button.setTitleColor(.white, for: .normal)
-//        button.setTitle("Get Posts Data", for: UIControl.State.normal)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.backgroundColor = customRed
-//        button.setTitleColor(.yellow, for: .selected)
-//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-//        return button
-//    }()
-//
-    lazy var theFavArray = userDefaults.value(forKey: "favoredItemsArray") as? [Bool] ?? [Bool]()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,11 +146,7 @@ class ViewController: UIViewController {
         setUpUI()
         setupTableView()
         
-        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = .clear
-        
+       
         let imageBG = UIImage(named: "space-1648267457129-5048")?.image(alpha: 0.55)
         backGroundImageView.image = imageBG
         backGroundImageView.contentMode = .scaleAspectFill
@@ -193,7 +163,6 @@ class ViewController: UIViewController {
 
     }
 
-    // MARK: - Custom Functions
     
     override var prefersStatusBarHidden: Bool {
         return true
@@ -213,6 +182,11 @@ class ViewController: UIViewController {
     
     private func setupTableView() {
         view.addSubview(tableView)
+        
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .clear
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 45.0).isActive = true
@@ -338,7 +312,7 @@ class ViewController: UIViewController {
     
 }
 
-
+// MARK: - Extension Methods
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
