@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl(frame: .zero, primaryAction: refreshAction)
+        refresh.tintColor = .white
         return refresh
     }()
     
@@ -183,7 +184,7 @@ extension ViewController: UITableViewDataSourcePrefetching {
         present(destination, animated: true, completion: nil)
     //    navigationController?.pushViewController(destination, animated: true)
         
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

@@ -90,7 +90,7 @@ class DetailViewController: UIViewController {
         view.addSubview(storyImageView)
         
         let safeArea = view.safeAreaLayoutGuide
-        yellowView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 100).isActive = true
+        yellowView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 10).isActive = true
         yellowView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
         yellowView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
         yellowView.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
@@ -115,9 +115,9 @@ class DetailViewController: UIViewController {
         titleLabel.leadingAnchor.constraint(equalTo: yellowView.leadingAnchor,constant: 8.0).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: yellowView.trailingAnchor, constant: 8.0).isActive = true
         
-        storyImageView.topAnchor.constraint(equalTo: yellowView.bottomAnchor, constant: 8.0).isActive = true
-        storyImageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
-        storyImageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
+        storyImageView.topAnchor.constraint(equalTo: yellowView.bottomAnchor, constant: 16.0).isActive = true
+        storyImageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 10.0).isActive = true
+        storyImageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -10.0).isActive = true
         storyImageView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -20.0).isActive = true
         
         print("ImageData: \(imgData), Title: \(storyTitle)")
