@@ -111,7 +111,7 @@ class ViewController: UIViewController {
     }
     
     private func refreshData() {
-        print("refreshData")
+    //    print("refreshData")
         viewModel?.forceUpdate()
     }
 
@@ -158,7 +158,7 @@ extension ViewController: UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
 //        let row = indexPath.row
-        print("deselected...")
+   //     print("deselected...")
         
        
     }
@@ -196,15 +196,15 @@ extension ViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        print(indexPath)
-        print("cell is deleting...")
+   //     print(indexPath)
+    //    print("cell is deleting...")
         let row = indexPath.row
         viewModel?.deleteCell(by: row)
         
-        print("Total Rows: \(viewModel?.totalRows)")
+  //      print("Total Rows: \(viewModel?.totalRows)")
         
         DispatchQueue.main.async {
-            print("removed...")
+     //       print("removed...")
             UIView.transition(with: tableView, duration: 0.25, options: .transitionCrossDissolve, animations: {self.tableView.reloadData()}, completion: nil)
         }
     }

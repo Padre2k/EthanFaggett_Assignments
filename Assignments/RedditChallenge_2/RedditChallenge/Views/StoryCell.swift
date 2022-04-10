@@ -64,26 +64,17 @@ class StoryCell: UITableViewCell {
     }
     
     func configureCell(title: String?, imageData: Data?) {
-        
      //   var str = "Hello World"
         if let titleStr: String = title {
             titleLabel.text = titleStr.uppercased()
         }else {
             titleLabel.text = title
         }
-        
-        
-//        if let resultStr = title {
-//            resultStr.uppercased()
-//            titleLabel.text = resultStr
-//        } else {
-//            titleLabel.text = title
-//        }
+
         
         storyImageView.image = nil
         if let imageData = imageData {
             storyImageView.image = UIImage(data: imageData)
-//            storyImageView.contentMode = .scaleToFill
             storyImageView.contentMode = .scaleAspectFill
             storyImageView.layer.masksToBounds = true
         }

@@ -77,7 +77,7 @@ class DetailViewController: UIViewController {
     //MARK: - Custom Methods
     private lazy var action1 = UIAction { [weak self] _ in
         
-        print("Action Button tapped....")
+    //    print("Action Button tapped....")
         
         self!.dismiss(animated: true, completion: nil)
     }
@@ -120,7 +120,7 @@ class DetailViewController: UIViewController {
         storyImageView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -10.0).isActive = true
         storyImageView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -20.0).isActive = true
         
-        print("ImageData: \(imgData), Title: \(storyTitle)")
+  //      print("ImageData: \(imgData), Title: \(storyTitle)")
         
     }
 
