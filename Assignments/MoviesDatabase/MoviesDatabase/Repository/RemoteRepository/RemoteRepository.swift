@@ -29,7 +29,17 @@ class RemoteRepository: RemoteRepositoryProtocol {
                 }
             } receiveValue: { response in
                 
-                print("response: \(response)")
+            //    print("response: \(response)")
+//                let movie = response["moview"] as! Movie
+//                let result = response["results"] as! Movie
+                
+                for movie in response.movie {
+
+                    print(movie.title)
+
+                }
+                
+                
              //   let afterKey = response.movie  //.data.after
              //   let movies = response.movie//.children.map { $0.data }   //.data.children.map { $0.data }
              //   completionHandler(.success((movies, afterKey)))

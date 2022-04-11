@@ -279,6 +279,16 @@ class ViewController: UIViewController {
                         self?.tableView.reloadData()
                     }
                     
+                    for item in self!.marsItems {
+                        self!.favArray.append(item.status)
+                    }
+                    if self!.theFavArray.count == 0 {
+                        for item in self!.marsItems {
+                            self!.theFavArray.append(item.status)
+                        }
+                    }
+                    
+                    
                     //                    print(item)
                     //                    print(self!.marsItems)
                     //                    print("----")
@@ -305,18 +315,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.text = "\(marsItems[row].img_src)"
             cell.detailTextLabel?.text = "ID: \(marsItems[row].id)"
             
-            if  marsItems[row].status || theFavArray[row] {
-                
-                if marsItems[row].status != theFavArray[row] {
-                    updateDataPersist()
+            if  ((marsItems.count > 0) && (theFavArray.count > 0)) {
+                if  marsItems[row].status || theFavArray[row] {
+                    
+                    if marsItems[row].status != theFavArray[row] {
+                        updateDataPersist()
+                    }
+                    
+                    cell.accessoryType = .checkmark
+                    cell.tintColor = .red
+                } else {
+                    cell.accessoryType = .none
                 }
-                
-                cell.accessoryType = .checkmark
-                cell.tintColor = .red
-            } else {
-                cell.accessoryType = .none
-            }
             
+        }
             if row % 2 == 0 {
                 cell.backgroundColor = midGray  //UIColor(displayP3Red: 23/255, green: 23/255, blue: 176/255, alpha: 1.0)
                 cell.textLabel?.textColor = UIColor.white
@@ -350,6 +362,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         destination.id = marsItems[row].id
         destination.imgURL = marsItems[row].img_src
         destination.delegate = self
+        
+        title = "\(marsItems[row].id)"
         
         navigationController?.pushViewController(destination, animated: true)
     }
