@@ -20,10 +20,19 @@ class RemoteRepository: RemoteRepositoryProtocol {
     func getMovies(from url: String, _ completionHandler: @escaping (Result<SuccessResponse, NetworkError>) -> Void) {
         networkManager
             .getModel(MovieResponse.self, from: url)
-            .sink { _ in } receiveValue: { response in
-                let afterKey = response.data.after
-                let movies = response.data.children.map { $0.data }
-                completionHandler(.success((movies, afterKey)))
+            .sink { completion in
+                switch( completion) {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            } receiveValue: { response in
+                
+                print("response: \(response)")
+             //   let afterKey = response.movie  //.data.after
+             //   let movies = response.movie//.children.map { $0.data }   //.data.children.map { $0.data }
+             //   completionHandler(.success((movies, afterKey)))
             }
             .store(in: &subscribers)
     }

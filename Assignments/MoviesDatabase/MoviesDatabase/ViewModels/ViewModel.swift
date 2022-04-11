@@ -71,7 +71,6 @@ class ViewModel: ViewModelProtocol {
     
       
     private func createURL(_ afterKey: String? = nil) -> String {
-        print("Getting url...")
         guard let afterKey = afterKey else {
             return NetworkURLs.urlBase
         }
@@ -86,6 +85,9 @@ class ViewModel: ViewModelProtocol {
         print("In GetMovies Method...")
         // 2. get data from API
         repository.getMovies(from: url) { [weak self] result in
+          
+            print("result viewModel: \(result)")
+            
             switch result {
             case .success(let tuple):
                 self?.afterKey = tuple.1

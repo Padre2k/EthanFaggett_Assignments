@@ -298,6 +298,8 @@ class SecondViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = true
+        print("Second will Appear...")
+        viewModel?.getMovies()
     }
     
     func showDetailView() {
