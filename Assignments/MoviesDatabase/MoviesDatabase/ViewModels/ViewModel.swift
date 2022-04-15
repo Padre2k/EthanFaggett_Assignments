@@ -23,6 +23,10 @@ protocol ViewModelProtocol {
 }
 
 class ViewModel: ViewModelProtocol {
+//    func getImageData(by row: Int) -> Data? {
+//        <#code#>
+//    }
+    
     func getOverview(by row: Int) -> String? {
         guard row < movies.count else { return nil }
         let movie = movies[row]
@@ -111,7 +115,34 @@ class ViewModel: ViewModelProtocol {
    
     
     func getImageData(by row: Int) -> Data? {
-        return photoCache[row]
+//        return photoCache[row]
+//        getMovies(url: "")
+//        let url = NetworkURLs.urlBase
+//        let movies:[Movie] = self.getMovies(from: url)
+       
+//        getMovies()
+        var data = Data()
+        let urlBase = "https://image.tmdb.org/t/p/w500"
+        guard let photoData = movies[row].poster_path else {
+            return Data()
+        }
+        
+        let finalUrl = urlBase + photoData
+        print(finalUrl)
+        
+        guard let url = URL(string: (finalUrl))
+        else { return Data()}
+        
+        do {
+             data = try Data(contentsOf: url)
+           
+        } catch (let error) {
+            print(error.localizedDescription)
+            
+        }
+        
+        return data
+        
     }
     
     func getTitle(by row: Int) -> String? {

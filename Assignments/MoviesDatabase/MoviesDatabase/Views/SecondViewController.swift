@@ -6,11 +6,38 @@
 //
 
 import UIKit
+import Combine
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, ViewControllerProtocol {
     
     var isMovieList = true
+    var firstName = ""
+    var lastName = ""
+    let defaults = UserDefaults.standard
+    
+    var firstVC = ViewController()
+    
+    
+    
+    
+   // var viewModel: ViewModelProtocol?
+    
+  //  var secondViewController = SecondViewController()
+    
     var viewModel: ViewModelProtocol?
+    private var subscribers = Set<AnyCancellable>()
+    
+    private lazy var refreshAction: UIAction = UIAction { [weak self] _ in
+        self?.refreshData()
+    }
+    
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl(frame: .zero, primaryAction: refreshAction)
+        return refresh
+    }()
+    
+    
     
     //   var movieCell = MovieTableViewCell()
     
@@ -39,7 +66,7 @@ class SecondViewController: UIViewController {
         return tableview
     }()
     
-    private let nameLabel: UILabel = {
+    let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir", size: 22)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -104,8 +131,6 @@ class SecondViewController: UIViewController {
         // Add function to handle Value Changed events
         segment.addTarget(self, action: #selector(indexChanged), for: .valueChanged)
         
-        
-        
         return segment
     }()
     
@@ -121,12 +146,18 @@ class SecondViewController: UIViewController {
         
 //        self!.showDetailView()
         
-        let destination = EditUserViewController()
+        let destination = ViewController()
         //        destination.imgData =  viewModel?.getImageData(by: row)
         //        destination.storyTitle = viewModel?.getTitle(by: row)
         
         //        self!.present(destination, animated: true, completion: nil)
+        destination.labelView.text = "Edit Username"
+        destination.isEdit = true
+        destination.fName = self!.firstName
+        destination.lName = self!.lastName
         self!.present(destination, animated: true, completion: {
+            
+            
             print("It is done.")
         })
         
@@ -150,7 +181,7 @@ class SecondViewController: UIViewController {
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: MovieTableViewCell.identifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.backgroundColor = UIColor.customDarkBlue3
+        tableView.backgroundColor = UIColor.white
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0.0).isActive = true
@@ -191,16 +222,34 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        ViewControllerConfigurator.assemblingMVVM(view: self)
+        
+        
+       
+//        defaults.set(CGFloat.pi, forKey: "Pi")
+        
+        
+        
         // movieCell.delegate = self
 //        print("Num of Rows: \((viewModel?.totalRowsMovies)!))")
-        viewModel?.getMovies()
-       
+       // viewModel?.getMovies()
+        viewModel?.loadMoreMovies()
         view.backgroundColor = .cyan
         // Do any additional setup after loading the view.
         setUpUI()
         setupTableView()
         
-        nameLabel.text = "Name: Faggett, Ethan"
+        nameLabel.text = "\(lastName), \(firstName)"//"Name: Faggett, Ethan"
+        let firstName1 = defaults.object(forKey: "firstName") as? String? ?? ""
+        let lastName1 = defaults.object(forKey: "lastName") as? String? ?? ""
+        
+        nameLabel.text = "Greetings1: \(lastName1), \(firstName1)"
+        
+        setUpBinding()
+        
+        print("# of VCs:  \(navigationController!.viewControllers)")
+        
+        
         
     }
     
@@ -300,19 +349,64 @@ class SecondViewController: UIViewController {
         navigationController?.navigationBar.isHidden = true
         print("Second will Appear...")
         viewModel?.getMovies()
+        
+        DispatchQueue.main.async {
+            guard let firstName1 = self.defaults.object(forKey: "firstName") as? String,
+                  let lastName1 = self.defaults.object(forKey: "lastName") as? String else {
+                      return
+                  }
+            
+            if firstName1.isEmpty && lastName1.isEmpty {
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                self.nameLabel.text = "Greetings: \(lastName1), \(firstName1)"
+                
+            }
+        
+        }
+        
     }
     
     func showDetailView() {
         print("Inside showDetailView() method ")
         let destination = DetailViewController()
-        //        destination.imgData =  viewModel?.getImageData(by: row)
-        //        destination.storyTitle = viewModel?.getTitle(by: row)
-        
-        //        self!.present(destination, animated: true, completion: nil)
         navigationController?.pushViewController(destination, animated: true)
         
         
     }
+    
+    private func setUpBinding() {
+        
+        viewModel?
+            .publisherMovies
+            .dropFirst()
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { [weak self] _ in
+                self?.refreshControl.endRefreshing()
+                self!.tableView.reloadData()      /////**************************************************
+            })
+            .store(in: &subscribers)
+        
+        viewModel?
+            .publisherPhotoCache
+            .dropFirst()
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { [weak self] _ in
+//                self?.tableView.reloadData()
+                self!.tableView.reloadData()
+            })
+            .store(in: &subscribers)
+        
+        viewModel?.getMovies()
+        
+    }
+    
+    private func refreshData() {
+        print("refreshData")
+        viewModel?.forceUpdate()
+    }
+
+    
     
     
 }
@@ -322,9 +416,11 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if isMovieList {
-            return testData.count
+           return viewModel?.totalRowsMovies ?? 0
+            //return testData.count
         } else {
-            return testData2.count
+//            return testData2.count
+            return viewModel?.totalRowsMovies ?? 0
         }
         
         
@@ -340,57 +436,49 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as! MovieTableViewCell
-        
-        //        cell.backgroundColor = .orange.withAlphaComponent(0.5)
-        //        cell.tintColor = .clear
-        //        cell.textLabel?.textColor = .white
-        
         cell.backgroundColor = .lightGray
         cell.layer.borderColor = UIColor.darkGray.cgColor //UIColor.white.cgColor
         cell.layer.borderWidth = 1
-        
         
         cell.buttonPressed = {
             //Code
             self.showDetailView()
         }
         
-        
         if isMovieList {
-            //return testData.count
-            let title = "Moon Valley Theatres"
             
-            cell.configureCell(title: title)  // imageData: data)
-            cell.configureCell(title: testData[row])  //cell.textLabel?.text = testData[row]
-            //     cell.backgroundColor = .blue.withAlphaComponent(0.5)
+            let title = viewModel?.getTitle(by: row)
+            let overview = viewModel?.getOverview(by: row)
+            let photoData = viewModel?.getImageData(by: row)
+            
+         //   viewModel?.getImageData(by: row)  //getImageData(row)
+            
+            cell.configureCell(title: title, overview: overview, imageData: photoData)
             cell.backgroundColor = UIColor.customDarkBlue2   //UIColor.customColorLightOrange2   //.orange.withAlphaComponent(0.75)
+            cell.backgroundColor = .orange.withAlphaComponent(0.0)
             cell.tintColor = .clear
-            cell.textLabel?.textColor = .white
-            
+            cell.textLabel?.textColor = .darkGray
             cell.accessoryType = .checkmark
-            //            cell.accessoryType
+//            cell.movieImageView.image = UIImage(data: photoData)
             
-            //            UIView.animate(withDuration: 0.25) {
-            //                     self.view.backgroundColor = UIColor.blue
-            //                cell.backgroundColor = .purple.withAlphaComponent(0.5)
-            //                  }
             
+          
         } else {
+            let title = viewModel?.getTitle(by: row)
+            let overview = viewModel?.getOverview(by: row)
+            let photoData = viewModel?.getImageData(by: row)
+            cell.configureCell(title: title, overview: overview, imageData: photoData)
             
-            let title = "Moon Valley Theatres"
-            cell.configureCell(title: title)   //testData2[row])
-            cell.backgroundColor = UIColor.customDarkBlue3    //UIColor.customColorLightOrange.withAlphaComponent(0.70)    //.yellow.withAlphaComponent(0.75)
+            cell.backgroundColor = UIColor.customColorLightOrange2   //UIColor.customColorLightOrange.withAlphaComponent(0.70)    //.yellow.withAlphaComponent(0.75)
             cell.tintColor = .white
             cell.textLabel?.textColor = .white
             cell.accessoryType = .checkmark
-            
-            //return testData2.count
         }
         
         
         //TableView selected cell color
         let bgColorView = UIView()
-        bgColorView.backgroundColor = UIColor.green
+        bgColorView.backgroundColor = UIColor.orange
         cell.selectedBackgroundView = bgColorView
         
         return cell
@@ -401,6 +489,22 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         
         
         tableView.deselectRow(at: indexPath, animated: true)
+        
+    }
+    
+}
+
+extension SecondViewController: ViewControllerDelegate {
+   
+    func setName(fName: String, lName: String) {
+        
+        print("In the setName Method. \n FName: \(fName), LName: \(lName)")
+        self.nameLabel.text = "Greetings2: \(lName), \(fName)"
+    
+        print("in the delegate method.......")
+        DispatchQueue.main.async { [self] in
+            self.nameLabel.text = "Greetings3: \(lName), \(fName)"
+        }
         
     }
     

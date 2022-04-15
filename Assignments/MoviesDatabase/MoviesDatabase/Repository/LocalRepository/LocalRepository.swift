@@ -38,12 +38,12 @@ class LocalRepository: LocalRepositoryProtocol {
 //            if let numComments = story.numComments {
 //                cdStory.numComments = Int64(numComments)
 //            }
-            cdMovie.popularity = "\(movie.popularity)"
+//            cdMovie.popularity = "\(movie.popularity)"
             cdMovie.id = Int64(movie.id)
-            cdMovie.vote_average = "\(movie.vote_average)"
-            cdMovie.vote_count = "\(movie.vote_count)"
-            cdMovie.release_date = movie.release_date
-            cdMovie.poster_path = movie.poster_path
+//            cdMovie.vote_average = "\(movie.vote_average)"
+//            cdMovie.vote_count = "\(movie.vote_count)"
+//            cdMovie.release_date = movie.release_date
+//            cdMovie.poster_path = movie.poster_path
             cdMovie.overview = movie.overview
             
             

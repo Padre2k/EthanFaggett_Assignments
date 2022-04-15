@@ -10,7 +10,9 @@ import Foundation
 extension CDMovie {
     
     func createMovie() -> Movie {
-        return Movie(id: Int(id), title: title!, popularity: 22.2, vote_average: 77.0, vote_count: 22, release_date: release_date!, poster_path: poster_path!, overview: overview!)
+        return Movie(id: Int(id), title: title!, popularity: 22.2, vote_average: 77.0, vote_count: 22, release_date: "release_date!", poster_path: poster_path, overview: overview!)
+      //  return Movie(id: Int(id), title: title!, overview: overview!)
+        
     }
     
 }

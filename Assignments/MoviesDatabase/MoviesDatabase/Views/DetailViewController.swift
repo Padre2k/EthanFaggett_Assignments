@@ -10,9 +10,10 @@ import UIKit
 class DetailViewController: UIViewController {
 
     let testData = [1,2,3,4,5,6,7]
-    var data = [UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green]
+    var data = [UIColor.white, UIColor.white, UIColor.white, UIColor.white, UIColor.white, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green]
     
-    
+    var viewModel: ViewModelProtocol?
+   
     
     // MARK: UIButton
     private lazy var myEditButton: UIButton = {
@@ -42,7 +43,7 @@ class DetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .left
-        label.textColor = .white
+        label.textColor = .darkGray
         label.font = UIFont(name: "Menlo", size: 16)
 //        label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
@@ -79,7 +80,7 @@ class DetailViewController: UIViewController {
     private let textfield: UITextView = {
         let textfield = UITextView()
         textfield.textAlignment = .justified
-        textfield.textColor = .white
+        textfield.textColor = .black
         textfield.backgroundColor = .clear
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.isEditable = false
@@ -98,7 +99,7 @@ class DetailViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .orange
+        collectionView.backgroundColor = .lightGray
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(MovieCollectionViewCell.self, forCellWithReuseIdentifier: MovieCollectionViewCell.identifier)
@@ -141,20 +142,24 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       print("number of rows in table: \(viewModel?.totalRowsMovies)")
+        
         title = "Detail View"
         titleLabel.text = "Sample Blockbuster"
         textfield.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."
         productionLabel.text = "Production Companies:"
         
         setUpUI()
-        view.backgroundColor = .customDarkBlue2
+        view.backgroundColor = .white//.customDarkBlue2
         // Do any additional setup after loading the view.
      //   let add = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(addTapped))
 
         if self.navigationController!.viewControllers.count >= 4 {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(dismissVC))
         }
-       
+     
+       print("# of VCs:  \(navigationController!.viewControllers)")
+        
     }
     
     @objc private func dismissVC() {
@@ -189,10 +194,10 @@ class DetailViewController: UIViewController {
     
     private func setUpUI() {
 
-        let image = UIImage(named: "orange-gradient-wallpaper-1448-1581-hd-wallpapers-1024x640")?.image(alpha: 0.75)
+        let image = UIImage(named: "orange-gradient-wallpaper-1448-1581-hd-wallpapers-1024x640")?.image(alpha: 1.0)
         backGroundImageView.image = image
 //        backGroundImageView.contentMode = .scaleAspectFill
-
+//        view.backgroundColor = .white
 //        contentView.backgroundColor = .black
 
 //        contentView.addSubview(backGroundImageView)
@@ -248,7 +253,7 @@ class DetailViewController: UIViewController {
         
 
         movieImageView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 10.0).isActive = true
-        movieImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10.0).isActive = true
+        movieImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
         movieImageView.heightAnchor.constraint(equalToConstant: 250.0).isActive = true
         movieImageView.widthAnchor.constraint(equalToConstant: 160.0).isActive = true
 

@@ -20,14 +20,28 @@ class MovieTableViewCell: UITableViewCell {
     static let identifier = "MovieCell"
     let secondViewController = SecondViewController()
     
-    private let titleLabel: UILabel = {
+    private let movieTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textAlignment = .left
-        label.textColor = .white
-        label.font = UIFont(name: "Menlo", size: 16)
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = .darkGray
+        label.adjustsFontSizeToFitWidth = true
+//        
+//        if let count = label.text?.count {
+//            if count <= 13 {
+//                label.adjustsFontSizeToFitWidth = true
+//                label.minimumScaleFactor = 0.5
+//                label.numberOfLines = 1
+//             }
+//         }
+
+        
+        
+//        label.font = UIFont(name: "Menlo", size: 16)
+        label.font = UIFont(name: "Menlo", size: 20)?.bold
+//        myLabel2.font = UIFont.italicSystemFont(ofSize: 34, weight: .black)
+
         return label
     }()
     
@@ -59,14 +73,15 @@ class MovieTableViewCell: UITableViewCell {
         return backGroundImageView
     }()
 
-    private let textfield: UITextView = {
-        let textfield = UITextView()
-        textfield.textAlignment = .justified
-        textfield.textColor = .white
+    private let textfield: UILabel = {
+        let textfield = UILabel()
+        textfield.textAlignment = .left
+        textfield.textColor = .black
         textfield.backgroundColor = .clear
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.isEditable = false
-        textfield.isSelectable = false
+        textfield.numberOfLines = 0
+        //textfield.isEditable = false
+        //textfield.isSelectable = false
 //        textfield.set
         return textfield
     }()
@@ -91,7 +106,7 @@ class MovieTableViewCell: UITableViewCell {
 //        contentView.addSubview(backGroundImageView)
         contentView.addSubview(movieImageView)
         
-        contentView.addSubview(titleLabel)
+        contentView.addSubview(movieTitle)
        
         contentView.addSubview(button)
         contentView.addSubview(textfield)
@@ -101,25 +116,25 @@ class MovieTableViewCell: UITableViewCell {
         // create constraints
         let safeArea = contentView.safeAreaLayoutGuide
         
-        button.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        button.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 7.0).isActive = true
-        button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 25.0).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 32.0).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        button.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true
+        button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 27.0).isActive = true
         
       //  titleLabel.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
-      //  titleLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10.0).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.0).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+        movieTitle.rightAnchor.constraint(equalTo: button.leftAnchor).isActive = true
+        movieTitle.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 10.0).isActive = true
+        movieTitle.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.0).isActive = true
+        movieTitle.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
         
 //        backGroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.0).isActive = true
 //        backGroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
 //        backGroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
 //        backGroundImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
-        textfield.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
-        textfield.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
-        textfield.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 7.0).isActive = true
+//        textfield.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
+        textfield.topAnchor.constraint(equalTo: movieTitle.bottomAnchor, constant: 10.0).isActive = true
+        textfield.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 10.0).isActive = true
       //  textfield.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -7.0).isActive = true
        // textfield.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5.0).isActive = true
         textfield.widthAnchor.constraint(equalToConstant: 200.0).isActive = true
@@ -127,9 +142,10 @@ class MovieTableViewCell: UITableViewCell {
 
         
         
-        movieImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40.0).isActive = true
+        movieImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30.0).isActive = true
         movieImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10.0).isActive = true
-        movieImageView.heightAnchor.constraint(equalToConstant: 130.0).isActive = true
+//        movieImageView.heightAnchor.constraint(equalToConstant: 130.0).isActive = true
+        movieImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5.0).isActive = true
         movieImageView.widthAnchor.constraint(equalToConstant: 120.0).isActive = true
         
         button.layer.cornerRadius = 5
@@ -146,25 +162,30 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     
-    func configureCell(title: String?){ //, imageData: Data?) {
+    func configureCell(title: String?, overview: String?, imageData: Data?){ //, imageData: Data?) {
      //   var str = "Hello World"
 //        if let titleStr: String = title {
 //            titleLabel.text = titleStr.uppercased()
 //        }else {
-            titleLabel.text = title
+        movieTitle.text = title
 //        }
-        textfield.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia."
-        
+//        textfield.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia."
+        textfield.text = overview
         
 //        backgroundColor = .orange.withAlphaComponent(0.5)
 //        tintColor = .clear
 //        textLabel?.textColor = .white
+    //    print("Image url: \(imageData)")
         
-//        storyImageView.image = nil
+        if let imageDataSafe = imageData {
+            movieImageView.image = UIImage(data: imageDataSafe)
+        }
+        
+//        movieImageView.image = nil
 //        if let imageData = imageData {
-//            storyImageView.image = UIImage(data: imageData)
-//            storyImageView.contentMode = .scaleAspectFill
-//            storyImageView.layer.masksToBounds = true
+//            movieImageView.image = UIImage(data: imageData)
+//            movieImageView.contentMode = .scaleAspectFill
+//            movieImageView.layer.masksToBounds = true
 //        }
     }
     

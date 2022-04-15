@@ -6,3 +6,17 @@
 //
 
 import Foundation
+
+
+struct MovieResponseAux {
+    
+    let movie: [Movie]
+    let dictionary:[String:Int] = [String:Int]()
+    
+    enum CodingKeys: String, CodingKey {
+    
+        case movie = "results"
+        case dictionary
+    }
+    
+}

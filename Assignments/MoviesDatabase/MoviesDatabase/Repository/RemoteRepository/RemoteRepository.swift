@@ -25,27 +25,62 @@ class RemoteRepository: RemoteRepositoryProtocol {
                 case .finished:
                     break
                 case .failure(let error):
-                    print("Error: \(error.localizedDescription)")
+                    print("---Error: \(error.localizedDescription)")
                 }
             } receiveValue: { response in
                 
-            //    print("response: \(response)")
-//                let movie = response["moview"] as! Movie
-//                let result = response["results"] as! Movie
+                print("response: \(response)")
+             //   let afterKey = response.totalPages  //.data.after
+                let movies = response.movie.map { $0 }
+                let photos = response.movie.map { $0 }//.data.children.map { $0.data }
                 
-                for movie in response.movie {
-
-                    print(movie.title)
-
-                }
-                
-                
-             //   let afterKey = response.movie  //.data.after
-             //   let movies = response.movie//.children.map { $0.data }   //.data.children.map { $0.data }
-             //   completionHandler(.success((movies, afterKey)))
+                completionHandler(.success((movies, "afterKey")))
             }
             .store(in: &subscribers)
     }
+    
+    static func downloadData(from url: String, completionHandler: @escaping (Data?) -> Void) {
+        
+        guard let url = URL(string: url) else {
+            completionHandler(nil)
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            completionHandler(data)
+            
+            
+        }.resume()
+    }
+        
+    
+    static func getMovies(from url: String, completionHandler: @escaping ([Movie]) -> Void) {
+        
+        guard let url = URL(string: url) else {
+            completionHandler([])
+            return
+        }
+        
+        //URLSession.shared.dataTask(with: url) { data, _, _ in
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            
+        
+            if let data = data {
+                
+                do {
+                    if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] {
+//                        let response = MovieResponseAux(from: jsonObject)
+//                        completionHandler(response.results)
+                    }
+                    
+                    
+                } catch  { }
+                
+            }
+        }.resume()
+    }
+        
+ 
     
     func getData(from url: String, completionHandler: @escaping (Result<Data, NetworkError>) -> Void) {
         networkManager.getData(from: url) { data in
