@@ -144,8 +144,16 @@ class ViewController: UIViewController {
     private lazy var action1 = UIAction { [weak self] _ in
         print("This is the button tapped...")
        
-        self!.defaults.set(self!.lastNameTextField.text!, forKey: "lastName")
-        self!.defaults.set(self!.firstNameTextField.text!, forKey: "firstName")
+        //self!.defaults.set(self!.lastNameTextField.text!, forKey: "lastName")
+        //self!.defaults.set(self!.firstNameTextField.text!, forKey: "firstName")
+        
+        guard let lastName = self?.lastNameTextField.text,
+                let firstName = self?.firstNameTextField.text
+        else { return }
+        
+        self?.defaults.set(lastName, forKey: "lastName")
+        self?.defaults.set(firstName, forKey: "firstName")
+        
         
         let destinationVC = SecondViewController()
         destinationVC.lastName = self!.lastNameTextField.text!
@@ -157,12 +165,29 @@ class ViewController: UIViewController {
     }
     
     private lazy var action2 = UIAction { [weak self] _ in
-        self!.defaults.set(self!.lastNameTextField.text!, forKey: "lastName")
-        self!.defaults.set(self!.firstNameTextField.text!, forKey: "firstName")
+        guard let lastName = self?.lastNameTextField.text,
+                let firstName = self?.firstNameTextField.text
+        else { return }
+       
+       self?.defaults.set(lastName, forKey: "lastName")
+       self?.defaults.set(firstName, forKey: "firstName")
         
-        let firstName1 = self!.defaults.object(forKey: "firstName") as? String? ?? "nil"
-        let lastName1 = self!.defaults.object(forKey: "lastName") as? String? ?? "nil"
+        print("Lastname: \(lastName), Firstname: \(firstName)")
+       
+        self!.dismiss(animated: true) {
+            if lastName == "" && firstName == "" {
+              //  self!.navigationController?.popToRootViewController(animated: true)
+                
+           //     print("# of VCs:  \(self!.navigationController!.viewControllers)")
+                
+                let firstVC = ViewController()
+                self!.navigationController?.pushViewController(firstVC, animated: true)  //popToViewController(firstVC, animated: true)
+            }
+        }
         
+       
+        
+      
      //   print(self!.defaults.string(forKey: "lastName"))
      //   print(self!.defaults.string(forKey: "firstName"))
 //        secondVC.delegate = self
@@ -195,7 +220,7 @@ class ViewController: UIViewController {
 //            }
 //        }
         
-        print("Num of Controllers: \(self?.navigationController?.viewControllers.count)")
+     //   print("Num of Controllers: \(self?.navigationController?.viewControllers.count)")
         
         
         
@@ -226,7 +251,7 @@ class ViewController: UIViewController {
         
         
       //  print(FileManager.default.urls(for: .documentsDirectory, in .userDomainMask))
-        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        print("FileManager: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
         setUpUI()
 //        setUpBinding()
 //        viewModel?.loadMoreMovies()
@@ -306,12 +331,8 @@ class ViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 self!.firstNameTextField.text = self!.defaults.object(forKey: "firstName") as? String? ?? "nil"
                 self!.lastNameTextField.text = self!.defaults.object(forKey: "lastName") as? String? ?? "nil"
-                
             }
-            
-            
         }
-        
     }
     
     @objc func editingChanged(_ textField: UITextField) {

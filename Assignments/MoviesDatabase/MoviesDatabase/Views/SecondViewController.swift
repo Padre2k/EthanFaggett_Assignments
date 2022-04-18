@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class SecondViewController: UIViewController, ViewControllerProtocol {
     
@@ -155,6 +156,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
         destination.isEdit = true
         destination.fName = self!.firstName
         destination.lName = self!.lastName
+        destination.modalPresentationStyle = .fullScreen
         self!.present(destination, animated: true, completion: {
             
             
@@ -222,35 +224,57 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         ViewControllerConfigurator.assemblingMVVM(view: self)
         
+        print("FileManager: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
         
+    //    searchBar.delegate = self       //I need this for  search
        
 //        defaults.set(CGFloat.pi, forKey: "Pi")
+        let tableData = viewModel!.getMoviesReturn {
+//            let movies = movie
+            print("end of get movies...")
+            
+        }
+        viewModel?.filteredData = tableData
         
+        print("tableData count: \(tableData)")
+        print("VM movies count: \(viewModel?.totalRowsMovies)")
+//        print("VM return movies count: \((viewModel?.getMoviesRet   )")
+        
+//        viewModel?.getMoviesReturn {
+//            print(movies)
+//        }
         
         
         // movieCell.delegate = self
 //        print("Num of Rows: \((viewModel?.totalRowsMovies)!))")
-       // viewModel?.getMovies()
-        viewModel?.loadMoreMovies()
+//        viewModel?.getMovies()
+//        viewModel?.loadMoreMovies()     //May add back***
         view.backgroundColor = .cyan
         // Do any additional setup after loading the view.
         setUpUI()
         setupTableView()
-        
-        nameLabel.text = "\(lastName), \(firstName)"//"Name: Faggett, Ethan"
-        let firstName1 = defaults.object(forKey: "firstName") as? String? ?? ""
-        let lastName1 = defaults.object(forKey: "lastName") as? String? ?? ""
-        
-        nameLabel.text = "Greetings1: \(lastName1), \(firstName1)"
-        
         setUpBinding()
+        mustEnterName()
         
         print("# of VCs:  \(navigationController!.viewControllers)")
         
         
         
+    }
+    
+    
+    func mustEnterName() {
+        nameLabel.text = "\(lastName), \(firstName)"//"Name: Faggett, Ethan"
+        let firstName1 = defaults.object(forKey: "firstName") as? String? ?? ""
+        let lastName1 = defaults.object(forKey: "lastName") as? String? ?? ""
+        
+        nameLabel.text = "Hi: --- ---"
+        
+        // self!.dismiss(animated: true) {
+       
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -270,6 +294,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     }
     
     func setUpUI() {
+        
         
         let image = UIImage(named: "luke-chesser-3rWagdKBF7U-unsplash")?.image(alpha: 0.55)
         backGroundImageView.image = image
@@ -304,8 +329,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
         nameLabel.topAnchor.constraint(equalTo: safeArea.topAnchor ).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10.0).isActive = true
         nameLabel.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-        //        nameLabel.widthAnchor.constraint(equalToConstant: 60.0).isActive = true
-        
+        nameLabel.rightAnchor.constraint(lessThanOrEqualTo: myEditButton.leftAnchor, constant: -10.0).isActive = true
         
         myEditButton.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 0.0 ).isActive = true
         myEditButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10.0).isActive = true
@@ -347,10 +371,10 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = true
-        print("Second will Appear...")
-        viewModel?.getMovies()
+       // print("Second will Appear...")
+//        viewModel?.getMovies()
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             guard let firstName1 = self.defaults.object(forKey: "firstName") as? String,
                   let lastName1 = self.defaults.object(forKey: "lastName") as? String else {
                       return
@@ -359,17 +383,35 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
             if firstName1.isEmpty && lastName1.isEmpty {
                 self.navigationController?.popToRootViewController(animated: true)
             } else {
-                self.nameLabel.text = "Greetings: \(lastName1), \(firstName1)"
-                
+                self.nameLabel.text = "Hi: \(firstName1) \(lastName1)"
+
             }
         
+            if firstName1 == "" && lastName1 == "" {
+                let destination = ViewController()
+                destination.labelView.text = "Edit Username"
+                destination.isEdit = true
+                destination.fName = firstName
+                destination.lName = lastName
+                destination.modalPresentationStyle = .fullScreen
+                present(destination, animated: true, completion: nil)
+            }
+           
+            
+            
         }
         
     }
     
-    func showDetailView() {
+    func showDetailView(title: String, overview: String, imageUrl: Data?, row: Int, movieID: Int) {
         print("Inside showDetailView() method ")
         let destination = DetailViewController()
+        destination.detailOverview = overview
+        destination.detailTitle = title
+        destination.detailImageData = imageUrl
+        destination.row = row
+        destination.movieID = movieID
+        
         navigationController?.pushViewController(destination, animated: true)
         
         
@@ -416,11 +458,12 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if isMovieList {
-           return viewModel?.totalRowsMovies ?? 0
+           return viewModel?.totalRowsMovies ?? 0    //this works
+//            return viewModel?.filteredData.count ?? (viewModel?.totalRowsMovies ?? 0)
             //return testData.count
         } else {
-//            return testData2.count
-            return viewModel?.totalRowsMovies ?? 0
+//             return viewModel?.totalRowsMovies ?? 0
+            return viewModel!.totalRowsFavs
         }
         
         
@@ -440,10 +483,20 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         cell.layer.borderColor = UIColor.darkGray.cgColor //UIColor.white.cgColor
         cell.layer.borderWidth = 1
         
-        cell.buttonPressed = {
-            //Code
-            self.showDetailView()
+        let photoData = viewModel?.getImageData(by: row)
+        
+        
+        if let overview = viewModel?.getOverview(by: row), let title = viewModel?.getTitle(by: row), let movieID = viewModel?.getMovieID(by: row) {
+            cell.buttonPressed = {
+                self.showDetailView(title: title, overview: overview, imageUrl: photoData, row: row, movieID: movieID)
+            }
+            
         }
+        
+        
+        
+//        let value = 
+        
         
         if isMovieList {
             
@@ -451,25 +504,19 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
             let overview = viewModel?.getOverview(by: row)
             let photoData = viewModel?.getImageData(by: row)
             
-         //   viewModel?.getImageData(by: row)  //getImageData(row)
-            
             cell.configureCell(title: title, overview: overview, imageData: photoData)
-            cell.backgroundColor = UIColor.customDarkBlue2   //UIColor.customColorLightOrange2   //.orange.withAlphaComponent(0.75)
+            cell.backgroundColor = UIColor.customDarkBlue2
             cell.backgroundColor = .orange.withAlphaComponent(0.0)
             cell.tintColor = .clear
             cell.textLabel?.textColor = .darkGray
             cell.accessoryType = .checkmark
-//            cell.movieImageView.image = UIImage(data: photoData)
-            
-            
           
         } else {
             let title = viewModel?.getTitle(by: row)
             let overview = viewModel?.getOverview(by: row)
             let photoData = viewModel?.getImageData(by: row)
             cell.configureCell(title: title, overview: overview, imageData: photoData)
-            
-            cell.backgroundColor = UIColor.customColorLightOrange2   //UIColor.customColorLightOrange.withAlphaComponent(0.70)    //.yellow.withAlphaComponent(0.75)
+            cell.backgroundColor = UIColor.customColorLightOrange2
             cell.tintColor = .white
             cell.textLabel?.textColor = .white
             cell.accessoryType = .checkmark
@@ -486,6 +533,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -505,6 +553,35 @@ extension SecondViewController: ViewControllerDelegate {
         DispatchQueue.main.async { [self] in
             self.nameLabel.text = "Greetings3: \(lName), \(fName)"
         }
+        
+    }
+    
+}
+
+extension SecondViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+       // let request: NSFetchRequest<MovieSingle> = MovieSingle.fetchRequest()
+     
+     //   print(searchBar.text)
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
+//        if let movieArray = viewModel?.getMoviesReturn(completionHandler: <#T##() -> ()#>) {
+//
+//            viewModel?.filteredData = []
+//
+//            for item in movieArray {
+//                if item.title.lowercased().contains(searchBar.text!) {
+//                    viewModel?.filteredData.append(item)
+//                }
+//            }
+//            self.tableView.reloadData()
+//
+//        }
+        
         
     }
     

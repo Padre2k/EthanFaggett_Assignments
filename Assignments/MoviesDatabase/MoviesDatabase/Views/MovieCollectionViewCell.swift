@@ -18,10 +18,10 @@ class MovieCollectionViewCell: UICollectionViewCell {
             return image
         }()
         
-        var titleLabel: UILabel = {
+        var mainTitleLabel: UILabel = {
             let title = UILabel()
             title.translatesAutoresizingMaskIntoConstraints = false
-            title.text = "Title"
+//            title.text = "Title"
             title.textColor = .black
             title.font = UIFont.boldSystemFont(ofSize: 20)
             return title
@@ -67,14 +67,15 @@ class MovieCollectionViewCell: UICollectionViewCell {
         
         func setUp(){
           //  contentView.addSubview(movieImage)
-            contentView.addSubview(titleLabel)
+            contentView.addSubview(mainTitleLabel)
             contentView.addSubview(movieText)
 //            contentView.addSubview(showDetails)
             contentView.addSubview(favorite)
             
             let container = contentView.safeAreaLayoutGuide
             
-            
+            mainTitleLabel.leftAnchor.constraint(equalTo: container.leftAnchor).isActive = true
+            mainTitleLabel.topAnchor.constraint(equalTo: container.topAnchor).isActive = true
 //            movieImage.topAnchor.constraint(equalTo: container.topAnchor, constant: 10).isActive = true
 //            movieImage.leftAnchor.constraint(equalTo: container.leftAnchor, constant: 10).isActive = true
 //         //   movieImage.widthAnchor.constraint(equalToConstant: contentView.frame.height * 2.2).isActive = true
@@ -95,4 +96,21 @@ class MovieCollectionViewCell: UICollectionViewCell {
             favorite.topAnchor.constraint(equalTo: container.topAnchor, constant: 3).isActive = true
             
         }
+    
+    func configureCell(title: String?, imageData: Data?){ //, imageData: Data?) {
+        mainTitleLabel.text = title
+        mainTitleLabel.textColor = .black
+        
+//        getImage(im)
+        
+        
+      //  textfield.text = overview
+        
+        if let imageDataSafe = imageData {
+            movieImage.image = UIImage(data: imageDataSafe)
+        }
+    }
+    
+    
+    
     }

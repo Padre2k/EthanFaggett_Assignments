@@ -10,12 +10,17 @@ import Foundation
 
 class Repository: RepositoryProtocol {
     
+    
     let remote: RemoteRepositoryProtocol
     let local: LocalRepositoryProtocol
     
     init(remote: RemoteRepositoryProtocol, local: LocalRepositoryProtocol) {
         self.remote = remote
         self.local = local
+    }
+    
+    func getMovieCompany(companyID: String, completionHandler: @escaping (Result<MovieProd, NetworkError>) -> Void) {
+        remote.getMovieCompany(companyID: companyID, completionHandler: completionHandler)
     }
     
     func getMovies(from url: String, _ completionHandler: @escaping (Result<SuccessResponse, NetworkError>) -> Void) {

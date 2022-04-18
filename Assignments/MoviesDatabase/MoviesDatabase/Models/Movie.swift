@@ -36,7 +36,7 @@ struct Movie: Codable {
     enum CodingKeys: String, CodingKey {
         
         case id
-        case title
+        case title = "original_title"
         case popularity
         case vote_average
         case vote_count

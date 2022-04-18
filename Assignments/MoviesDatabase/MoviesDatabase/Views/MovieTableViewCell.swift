@@ -10,12 +10,8 @@ import UIKit
 class MovieTableViewCell: UITableViewCell {
     
     //create your closure here
-             var buttonPressed : (() -> ()) = {}
-
-//            @IBAction func buttonAction(_ sender: UIButton) {
-//        //Call your closure here
-//                buttonPressed()
-//            }
+    var buttonPressed : (() -> ()) = {}
+    
     
     static let identifier = "MovieCell"
     let secondViewController = SecondViewController()
@@ -27,21 +23,7 @@ class MovieTableViewCell: UITableViewCell {
         label.textAlignment = .left
         label.textColor = .darkGray
         label.adjustsFontSizeToFitWidth = true
-//        
-//        if let count = label.text?.count {
-//            if count <= 13 {
-//                label.adjustsFontSizeToFitWidth = true
-//                label.minimumScaleFactor = 0.5
-//                label.numberOfLines = 1
-//             }
-//         }
-
-        
-        
-//        label.font = UIFont(name: "Menlo", size: 16)
         label.font = UIFont(name: "Menlo", size: 20)?.bold
-//        myLabel2.font = UIFont.italicSystemFont(ofSize: 34, weight: .black)
-
         return label
     }()
     
@@ -114,7 +96,7 @@ class MovieTableViewCell: UITableViewCell {
 //        contentView.backgroundColor = .systemPink
         
         // create constraints
-        let safeArea = contentView.safeAreaLayoutGuide
+   //     let safeArea = contentView.safeAreaLayoutGuide
         
         button.heightAnchor.constraint(equalToConstant: 32.0).isActive = true
         button.widthAnchor.constraint(equalToConstant: 75).isActive = true
@@ -163,30 +145,11 @@ class MovieTableViewCell: UITableViewCell {
     
     
     func configureCell(title: String?, overview: String?, imageData: Data?){ //, imageData: Data?) {
-     //   var str = "Hello World"
-//        if let titleStr: String = title {
-//            titleLabel.text = titleStr.uppercased()
-//        }else {
         movieTitle.text = title
-//        }
-//        textfield.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia."
         textfield.text = overview
-        
-//        backgroundColor = .orange.withAlphaComponent(0.5)
-//        tintColor = .clear
-//        textLabel?.textColor = .white
-    //    print("Image url: \(imageData)")
-        
         if let imageDataSafe = imageData {
             movieImageView.image = UIImage(data: imageDataSafe)
         }
-        
-//        movieImageView.image = nil
-//        if let imageData = imageData {
-//            movieImageView.image = UIImage(data: imageData)
-//            movieImageView.contentMode = .scaleAspectFill
-//            movieImageView.layer.masksToBounds = true
-//        }
     }
     
     

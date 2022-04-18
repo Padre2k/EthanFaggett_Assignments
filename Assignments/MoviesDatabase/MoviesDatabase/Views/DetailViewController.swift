@@ -7,10 +7,17 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, ViewControllerProtocol {
 
     let testData = [1,2,3,4,5,6,7]
     var data = [UIColor.white, UIColor.white, UIColor.white, UIColor.white, UIColor.white, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green, UIColor.red, UIColor.green, UIColor.blue, UIColor.green, UIColor.purple, UIColor.orange, UIColor.blue, UIColor.green, UIColor.blue, UIColor.green]
+    var detailTitle = ""
+    var detailOverview = ""
+    var detailImageData: Data? = Data()
+    var row = 0
+    lazy var movieID = 0
+    
+    
     
     var viewModel: ViewModelProtocol?
    
@@ -77,16 +84,17 @@ class DetailViewController: UIViewController {
         return backGroundImageView
     }()
 
-    private let textfield: UITextView = {
-        let textfield = UITextView()
+    private let textfield: UILabel = {
+        let textfield = UILabel()
         textfield.textAlignment = .justified
         textfield.textColor = .black
         textfield.backgroundColor = .clear
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.isEditable = false
-        textfield.isSelectable = false
+        //textfield.isEditable = false
+        //textfield.isSelectable = false
+        textfield.numberOfLines = 0
         textfield.font = UIFont(name: "Menlo", size: 13)
-//        textfield.set
+        textfield.sizeToFit()
         return textfield
     }()
    
@@ -139,14 +147,51 @@ class DetailViewController: UIViewController {
         
     }
     
+    private func getImage(imageString: String) {
+        let serialQueue = DispatchQueue(label: "queue-get image")
+        serialQueue.async { [weak self] in
+            let urlS = "https://image.tmdb.org/t/p/w500/" + imageString
+            guard let url = URL(string: urlS)
+            else { return }
+            do {
+                let data = try Data(contentsOf: url)
+                
+                DispatchQueue.main.async {
+                    self?.movieImageView.image = UIImage(data: data)
+                }
+                
+            } catch (let error) {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-       print("number of rows in table: \(viewModel?.totalRowsMovies)")
+   //    print("number of rows in table: \(viewModel?.totalRowsMovies)")
+        ViewControllerConfigurator.assemblingMVVM(view: self)
         
-        title = "Detail View"
+//        self.viewModel?.getMovieCompany
+        
+        print("the description: \(detailOverview)")
+        print("the title: \(detailTitle)")
+        print("the row: \(row)")
+        print("the image data: \(detailImageData)")
+        print("movie id: \(movieID)")
+        
+        title = detailTitle
         titleLabel.text = "Sample Blockbuster"
-        textfield.text = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."
+        textfield.text = detailOverview
+        
+  //      let photoData = viewModel?.getImageData(by: row)
+  //      print("photoData: \(photoData)")
+        if let imageDataSafe = detailImageData {
+            movieImageView.image = UIImage(data: imageDataSafe)
+        }
+        
+        
+        //"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."
         productionLabel.text = "Production Companies:"
         
         setUpUI()
@@ -159,6 +204,16 @@ class DetailViewController: UIViewController {
         }
      
        print("# of VCs:  \(navigationController!.viewControllers)")
+        
+//       Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { timer in
+//           print("firing...")
+//            self.viewModel?.getMovieCompany(companyID: "\(self.movieID)")
+//        }
+//
+//        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+//            print("Timer fired!")
+//        }
+        
         
     }
     
@@ -207,7 +262,7 @@ class DetailViewController: UIViewController {
         view.addSubview(textfield)
         view.addSubview(productionLabel)
         view.addSubview(collectionView)
-        view.addSubview(myEditButton)
+//        view.addSubview(myEditButton)
 //        collectionView.addSubview(<#T##view: UIView##UIView#>)
 //        contentView.backgroundColor = .systemPink
 
@@ -229,22 +284,23 @@ class DetailViewController: UIViewController {
         productionLabel.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: 0.0).isActive = true
      //   productionLabel.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
 
-        myEditButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80.0).isActive = true
-        myEditButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        myEditButton.widthAnchor.constraint(equalToConstant: 35.0).isActive = true
-        myEditButton.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
+//        myEditButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80.0).isActive = true
+//        myEditButton.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//        myEditButton.widthAnchor.constraint(equalToConstant: 35.0).isActive = true
+//        myEditButton.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
 //        backGroundImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0.0).isActive = true
 //        backGroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
 //        backGroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
 //        backGroundImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
-        textfield.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
-        textfield.topAnchor.constraint(equalTo: titleLabel.bottomAnchor).isActive = true
-        textfield.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 7.0).isActive = true
+       // textfield.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+        textfield.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 10.0).isActive = true
+        textfield.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 10.0).isActive = true
       //  textfield.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -7.0).isActive = true
-        textfield.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -5.0).isActive = true
+        textfield.rightAnchor.constraint(equalTo: safeArea.rightAnchor, constant: -10.0).isActive = true
    //     textfield.widthAnchor.constraint(equalToConstant: 200.0).isActive = true
-        textfield.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+      //  textfield.bottomAnchor.constraint(equalTo: productionLabel.topAnchor, constant: -20).isActive = true
+        textfield.heightAnchor.constraint(lessThanOrEqualToConstant: 250.0).isActive = true
 
         collectionView.topAnchor.constraint(equalTo: productionLabel.bottomAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -273,27 +329,28 @@ class DetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.isHidden = false
+    
+     //   viewModel?.getMovieCompany(companyID: "634649")
+        
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }
 
 extension DetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+//        return data.count
+        
+        return viewModel?.totalRowsCompany ?? 0
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
+        viewModel?.getMovies()
+        viewModel?.getMovieCompany(companyID: "\(movieID)")
+       
         //        UICollectionViewCell {
       //  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCollectionViewCell.identifier, for: indexPath) as! MovieCollectionViewCell
         let row = indexPath.row
@@ -308,6 +365,18 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
 //        cell.titleLabel.text = "Test cell..."
         print("cell \(row) was ceated.")
        
+        
+        
+        if let title = viewModel?.getTitle(by: row) , let photoData = viewModel?.getImageData(by: row) {
+        //    print("Title..: \(title), photoData...: \(photoData)")
+            
+            cell.configureCell(title: title, imageData: photoData)
+        }
+        
+       
+     
+        
+        
         
         return cell
         

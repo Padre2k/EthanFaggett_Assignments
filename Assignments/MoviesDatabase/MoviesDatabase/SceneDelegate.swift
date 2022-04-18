@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
        
-        if let firstName1 = defaults.object(forKey: "firstName") as? String,
-           let lastName1 = defaults.object(forKey: "lastName") as? String  {
+        if let _ = defaults.object(forKey: "firstName") as? String,
+           let _ = defaults.object(forKey: "lastName") as? String  {
             initialViewController = SecondViewController()
         } else {
             initialViewController = ViewController()

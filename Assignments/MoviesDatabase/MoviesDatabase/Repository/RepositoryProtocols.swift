@@ -18,6 +18,7 @@ typealias SuccessResponse = ([Movie], String)
 protocol RemoteRepositoryProtocol {
     func getMovies(from url: String, _ completionHandler: @escaping (Result<SuccessResponse, NetworkError>) -> Void)
     func getData(from url: String, completionHandler: @escaping (Result<Data, NetworkError>) -> Void)
+    func getMovieCompany(companyID: String , completionHandler: @escaping (Result<MovieProd, NetworkError>) -> Void)
 }
 
 // will be in charge to save data on disk
