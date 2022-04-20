@@ -16,7 +16,7 @@ class MovieTableViewCell: UITableViewCell {
     static let identifier = "MovieCell"
     let secondViewController = SecondViewController()
     
-    private let movieTitle: UILabel = {
+    let movieTitle: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
@@ -93,6 +93,10 @@ class MovieTableViewCell: UITableViewCell {
         contentView.addSubview(button)
         contentView.addSubview(textfield)
         
+        
+       
+        
+        
 //        contentView.backgroundColor = .systemPink
         
         // create constraints
@@ -101,7 +105,8 @@ class MovieTableViewCell: UITableViewCell {
         button.heightAnchor.constraint(equalToConstant: 32.0).isActive = true
         button.widthAnchor.constraint(equalToConstant: 75).isActive = true
         button.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true
-        button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 27.0).isActive = true
+        button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 32.0).isActive = true
+       // button.rightAnchor.constraint(equalTo: backGroundImageView.rightAnchor, constant: -10).isActive = true
         
       //  titleLabel.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
         movieTitle.rightAnchor.constraint(equalTo: button.leftAnchor).isActive = true
@@ -134,11 +139,23 @@ class MovieTableViewCell: UITableViewCell {
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.shadowColor = UIColor.black.cgColor
-        button.layer.shadowOffset = CGSize(width: 3, height: 3)
+        button.layer.shadowOffset = CGSize(width: 2, height: 2)
         
-        button.layer.shadowOpacity = 0.5
+        button.layer.shadowOpacity = 0.25
         button.layer.shadowRadius = 1.0
         button.layer.masksToBounds = false
+        
+        movieImageView.layer.cornerRadius = 12
+        movieImageView.layer.borderWidth = 2
+        movieImageView.layer.borderColor = UIColor.orange.cgColor
+        movieImageView.layer.shadowColor = UIColor.black.cgColor
+        movieImageView.layer.shadowOffset = CGSize(width: 3, height: 3)
+        
+        movieImageView.layer.shadowOpacity = 0.5
+        movieImageView.layer.shadowRadius = 1.0
+        movieImageView.layer.masksToBounds = true
+        
+        
         
         
     }
@@ -162,11 +179,6 @@ class MovieTableViewCell: UITableViewCell {
 
     
     private lazy var action1 = UIAction { [weak self] _ in
-//        self?.getImage()
-        print("This is the button tapped...")
-       
         self!.buttonPressed()
-        
-       
     }
 }

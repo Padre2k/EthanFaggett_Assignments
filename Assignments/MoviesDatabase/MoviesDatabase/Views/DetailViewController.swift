@@ -74,6 +74,7 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
         movieImageview.translatesAutoresizingMaskIntoConstraints = false
         movieImageview.backgroundColor = .lightGray
         movieImageview.image?.withTintColor(UIColor.red)
+//        movieImageview.
         return movieImageview
     }()
     
@@ -87,14 +88,16 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
     private let textfield: UILabel = {
         let textfield = UILabel()
         textfield.textAlignment = .justified
-        textfield.textColor = .black
+        textfield.textColor = .white
         textfield.backgroundColor = .clear
         textfield.translatesAutoresizingMaskIntoConstraints = false
         //textfield.isEditable = false
         //textfield.isSelectable = false
         textfield.numberOfLines = 0
-        textfield.font = UIFont(name: "Menlo", size: 13)
+        textfield.font = UIFont(name: "Century Gothic", size: 17)
         textfield.sizeToFit()
+        textfield.backgroundColor = .black.withAlphaComponent(0.40)
+//        textfield.layer.p
         return textfield
     }()
    
@@ -171,7 +174,8 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
 
    //    print("number of rows in table: \(viewModel?.totalRowsMovies)")
         ViewControllerConfigurator.assemblingMVVM(view: self)
-        
+        viewModel?.getMovieCompany(companyID: "\(movieID)")
+        print("total Company Rows: \(viewModel?.totalRowsCompany)")
 //        self.viewModel?.getMovieCompany
         
         print("the description: \(detailOverview)")
@@ -195,7 +199,7 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
         productionLabel.text = "Production Companies:"
         
         setUpUI()
-        view.backgroundColor = .white//.customDarkBlue2
+        view.backgroundColor = .customColorLightOrange
         // Do any additional setup after loading the view.
      //   let add = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(addTapped))
 
@@ -247,6 +251,11 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        viewModel?.totalComps = []
+    }
+    
+    
     private func setUpUI() {
 
         let image = UIImage(named: "orange-gradient-wallpaper-1448-1581-hd-wallpapers-1024x640")?.image(alpha: 1.0)
@@ -257,7 +266,7 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
 
 //        contentView.addSubview(backGroundImageView)
         view.addSubview(movieImageView)
-        view.addSubview(titleLabel)
+     //   view.addSubview(titleLabel)
   //      view.addSubview(button)
         view.addSubview(textfield)
         view.addSubview(productionLabel)
@@ -266,6 +275,17 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
 //        collectionView.addSubview(<#T##view: UIView##UIView#>)
 //        contentView.backgroundColor = .systemPink
 
+        movieImageView.layer.cornerRadius = 5
+        movieImageView.layer.borderWidth = 3
+        movieImageView.layer.borderColor = UIColor.white.cgColor
+        movieImageView.layer.shadowColor = UIColor.black.cgColor
+        movieImageView.layer.shadowOffset = CGSize(width: 3, height: 3)
+        
+        movieImageView.layer.shadowOpacity = 0.5
+        movieImageView.layer.shadowRadius = 1.0
+        movieImageView.layer.masksToBounds = true
+        
+        
         // create constraints
         let safeArea = view.safeAreaLayoutGuide
 
@@ -276,9 +296,9 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
 
       //  titleLabel.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
       //  titleLabel.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 10.0).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: movieImageView.topAnchor, constant: 0.0).isActive = true
-        titleLabel.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+//        titleLabel.leftAnchor.constraint(equalTo: movieImageView.rightAnchor, constant: 10.0).isActive = true
+//        titleLabel.topAnchor.constraint(equalTo: movieImageView.topAnchor, constant: 0.0).isActive = true
+//        titleLabel.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
 
         productionLabel.topAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: 30.0).isActive = true
         productionLabel.leftAnchor.constraint(equalTo: safeArea.leftAnchor, constant: 0.0).isActive = true
@@ -302,6 +322,14 @@ class DetailViewController: UIViewController, ViewControllerProtocol {
       //  textfield.bottomAnchor.constraint(equalTo: productionLabel.topAnchor, constant: -20).isActive = true
         textfield.heightAnchor.constraint(lessThanOrEqualToConstant: 250.0).isActive = true
 
+        // Padding
+//        textfield.paddingLeft = 8
+//        textfield.paddingRight = 8
+//        textfield.paddingTop = 8
+//        textfield.paddingBottom = 8
+        
+//        textfield.insetsLayoutMarginsFromSafeArea = .
+        
         collectionView.topAnchor.constraint(equalTo: productionLabel.bottomAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -367,10 +395,10 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
        
         
         
-        if let title = viewModel?.getTitle(by: row) , let photoData = viewModel?.getImageData(by: row) {
+        if let title = viewModel?.getProdTitle(by: row) , let photoProdData = viewModel?.getProdImageData(by: row) {
         //    print("Title..: \(title), photoData...: \(photoData)")
             
-            cell.configureCell(title: title, imageData: photoData)
+            cell.configureCell(title: title, imageData: photoProdData)
         }
         
        
@@ -388,9 +416,8 @@ extension DetailViewController: UICollectionViewDataSource, UICollectionViewDele
         let row = indexPath.row
         print("Item \(row) was pressed")
         
-        let destinationVC = DetailViewController()
-//        present(destinationVC, animated: true, completion: nil)
-        navigationController?.pushViewController(destinationVC, animated: true)
+//        let destinationVC = DetailViewController()
+//        navigationController?.pushViewController(destinationVC, animated: true)
     }
     
 }

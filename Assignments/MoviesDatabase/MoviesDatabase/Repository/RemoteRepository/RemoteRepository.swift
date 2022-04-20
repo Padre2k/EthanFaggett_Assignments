@@ -29,7 +29,7 @@ class RemoteRepository: RemoteRepositoryProtocol {
                 }
             } receiveValue: { response in
                 
-    //            print("response: \(response)")
+      //          print("response: \(response)")
              //   let afterKey = response.totalPages  //.data.after
                 let movies = response.movie.map { $0 }
            //     let imgPaths = response.movie.map { $0 }
@@ -126,7 +126,7 @@ class RemoteRepository: RemoteRepositoryProtocol {
                     // automatic
                     let companies = try JSONDecoder().decode(MovieProd.self, from: safeData)
                    
-                    
+//                    companies
                     //print("companies: \(companies)")
                     completionHandler(.success(companies))
                     

@@ -15,9 +15,18 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     var firstName = ""
     var lastName = ""
     let defaults = UserDefaults.standard
+    var localFav:[Int:Bool] = [Int:Bool]()
+    var tempFavs:[Int:Int] = [Int:Int]()
     
+    var localFav_2:[Int:Bool] = [Int:Bool]()
+    var movieDict = [Int:Int]()
+    var number = "0"
     var firstVC = ViewController()
+    var movieDictValues = [Int]()
+    var localMovies: [Movie]? = [Movie]()
+    var newFavsArray: [Int] = [Int]()
     
+    var favText = "Favorites "
     
     
     
@@ -143,7 +152,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     }()
     
     lazy var action1 = UIAction { [weak self] _ in
-        print("This is the button tapped...")
+      //  print("This is the button tapped...")
         
 //        self!.showDetailView()
         
@@ -160,7 +169,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
         self!.present(destination, animated: true, completion: {
             
             
-            print("It is done.")
+      //      print("It is done.")
         })
         
         
@@ -204,6 +213,15 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
         tableView.reloadData()
     }
     
+    func checkDataLoad(completionHandler: ([Movie])->()) {
+        
+        print("Let's go out for lunch")
+        if let inst = viewModel?.searchItem() {
+            completionHandler(inst)
+        }
+    }
+    
+    
     
     @IBAction func indexChanged(sender: UISegmentedControl) {
         switch segmentSwitch.selectedSegmentIndex
@@ -213,9 +231,10 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
             loadingData(isList: true)
             //show popular view
         case 1:
-            NSLog("Fovorites List")
+            NSLog("Favorites List")
             loadingData(isList: false)
             //show history view
+            tableView.reloadData()
         default:
             break;
         }
@@ -224,33 +243,58 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+      //  localFav_2[0] = true
+//        checkDataLoad {
+//            print("in the check data closure....")
+//
+//            let variable = viewModel?.searchItem()
+//            print(variable)
+//        }
         
+       
+        
+       // print("local movies array...: \(localMovies)")
         ViewControllerConfigurator.assemblingMVVM(view: self)
         
         print("FileManager: \(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))")
         
-    //    searchBar.delegate = self       //I need this for  search
-       
-//        defaults.set(CGFloat.pi, forKey: "Pi")
-        let tableData = viewModel!.getMoviesReturn {
-//            let movies = movie
-            print("end of get movies...")
-            
+        if let movies =  viewModel?.publisherMovies {
+            print("Movies......\(movies)")
+            let moviesList = movies.values   //.movie.map { $0 }
+            print("moviesList: \(moviesList)")
         }
-        viewModel?.filteredData = tableData
-        
-        print("tableData count: \(tableData)")
-        print("VM movies count: \(viewModel?.totalRowsMovies)")
-//        print("VM return movies count: \((viewModel?.getMoviesRet   )")
-        
-//        viewModel?.getMoviesReturn {
-//            print(movies)
-//        }
         
         
-        // movieCell.delegate = self
-//        print("Num of Rows: \((viewModel?.totalRowsMovies)!))")
-//        viewModel?.getMovies()
+        if let tempArray = viewModel?.searchItem {
+    //        print("localMovies: \(localMovies)")
+            localMovies = tempArray()
+            print("tempArray: \(tempArray)")
+            print("count: \(localMovies?.count)")
+        }
+
+        
+        if Int(number)! > 0 {
+            favText = favText + number
+        }
+        
+//        viewModel?.getMoviesReturn(completionHandler: { [weak self] movies in
+//
+//            for movie in movies {
+//
+//                let id = movie.id
+//                let isFav = false
+//
+//                let currentItem = MovieCustomSingle(id: id, isFavorite: isFav)
+//                self!.localFav.append(currentItem)
+//
+//            }
+//            self!.tableView.reloadData()
+//            print("localFav...........\(self!.localFav.count)")
+//            print("setting up favs array is done.")
+//
+//
+//        })
+        
 //        viewModel?.loadMoreMovies()     //May add back***
         view.backgroundColor = .cyan
         // Do any additional setup after loading the view.
@@ -259,9 +303,15 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
         setUpBinding()
         mustEnterName()
         
-        print("# of VCs:  \(navigationController!.viewControllers)")
+     //   print("# of VCs:  \(navigationController!.viewControllers)")
         
-        
+        checkDataLoad {result in
+            
+            print("Alfredo's Pizza: 2 miles away")
+            print("the results......: \(result)")
+            
+            
+        }
         
     }
     
@@ -362,11 +412,11 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     }
     
     @objc private func addTapped() {
-        print("Add Tapped....")
+    //    print("Add Tapped....")
     }
     
     @objc private func myLeftSideBarButtonItemTapped() {
-        print("Add Tapped....")
+    //    print("Add Tapped....")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -404,7 +454,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     }
     
     func showDetailView(title: String, overview: String, imageUrl: Data?, row: Int, movieID: Int) {
-        print("Inside showDetailView() method ")
+   //     print("Inside showDetailView() method ")
         let destination = DetailViewController()
         destination.detailOverview = overview
         destination.detailTitle = title
@@ -444,7 +494,7 @@ class SecondViewController: UIViewController, ViewControllerProtocol {
     }
     
     private func refreshData() {
-        print("refreshData")
+    //    print("refreshData")
         viewModel?.forceUpdate()
     }
 
@@ -462,8 +512,11 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
 //            return viewModel?.filteredData.count ?? (viewModel?.totalRowsMovies ?? 0)
             //return testData.count
         } else {
-//             return viewModel?.totalRowsMovies ?? 0
-            return viewModel!.totalRowsFavs
+            //             return viewModel?.totalRowsMovies ?? 0
+            //            return viewModel!.totalRowsFavs
+            //            return viewModel?.getFavsFlag().count ?? 0
+//            return localFav.count
+            return localFav_2.count
         }
         
         
@@ -479,48 +532,77 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
         
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as! MovieTableViewCell
-        cell.backgroundColor = .lightGray
-        cell.layer.borderColor = UIColor.darkGray.cgColor //UIColor.white.cgColor
-        cell.layer.borderWidth = 1
-        
+//        cell.backgroundColor = .lightGray
+//        cell.layer.borderColor = UIColor.darkGray.cgColor //UIColor.white.cgColor
+//        cell.layer.borderWidth = 1
+//        cell.accessoryType = .checkmark
+//        cell.tintColor = .clear
         let photoData = viewModel?.getImageData(by: row)
-        
+
         
         if let overview = viewModel?.getOverview(by: row), let title = viewModel?.getTitle(by: row), let movieID = viewModel?.getMovieID(by: row) {
             cell.buttonPressed = {
                 self.showDetailView(title: title, overview: overview, imageUrl: photoData, row: row, movieID: movieID)
             }
-            
         }
         
         
-        
-//        let value = 
-        
-        
-        if isMovieList {
-            
-            let title = viewModel?.getTitle(by: row)
-            let overview = viewModel?.getOverview(by: row)
-            let photoData = viewModel?.getImageData(by: row)
-            
-            cell.configureCell(title: title, overview: overview, imageData: photoData)
-            cell.backgroundColor = UIColor.customDarkBlue2
-            cell.backgroundColor = .orange.withAlphaComponent(0.0)
-            cell.tintColor = .clear
-            cell.textLabel?.textColor = .darkGray
-            cell.accessoryType = .checkmark
-          
-        } else {
-            let title = viewModel?.getTitle(by: row)
-            let overview = viewModel?.getOverview(by: row)
-            let photoData = viewModel?.getImageData(by: row)
-            cell.configureCell(title: title, overview: overview, imageData: photoData)
-            cell.backgroundColor = UIColor.customColorLightOrange2
-            cell.tintColor = .white
-            cell.textLabel?.textColor = .white
-            cell.accessoryType = .checkmark
-        }
+            if isMovieList {
+                let title = viewModel?.getTitle(by: row)
+                let overview = viewModel?.getOverview(by: row)
+                let photoData = viewModel?.getImageData(by: row)
+
+                cell.configureCell(title: title, overview: overview, imageData: photoData)
+            //    cell.backgroundColor = UIColor.customDarkBlue2
+                cell.backgroundColor = .orange.withAlphaComponent(0.0)
+                cell.textLabel?.textColor = .darkGray
+
+                if localFav_2[row] == true {
+                    cell.accessoryType = .checkmark
+                    cell.tintColor = .orange
+                } else {
+                    cell.accessoryType = .checkmark
+                    cell.tintColor = .clear
+                }
+
+//                print("id: \(row) - values: \(movieDict)")
+//                print("favs: \(localFav)")
+//                print("newFavsArray: \(newFavsArray)")
+
+            } else {
+                
+                cell.backgroundColor = .orange.withAlphaComponent(0.25)
+                cell.layer.borderColor = UIColor.lightGray.cgColor //UIColor.white.cgColor
+                cell.layer.borderWidth = 1
+                cell.accessoryType = .checkmark
+                
+                let favKeys = Array(localFav_2.keys)
+                
+                if favKeys.contains(row) {
+                    
+                    if localFav_2[row] == true {
+                        cell.accessoryType = .checkmark
+                        cell.tintColor = .black
+                    } else {
+                        cell.accessoryType = .checkmark
+                        cell.tintColor = .clear
+                    }
+                    
+                    print("localMovies: \(localMovies)")
+                    let title = viewModel?.getTitle(by: row)
+                    let overview = viewModel?.getOverview(by: row)
+                    let photoData = viewModel?.getImageData(by: row)
+                    
+       //             cell.backgroundColor = .red //UIColor.customColorLightOrange2.withAlphaComponent(0.75)
+                    //            cell.tintColor = .white
+                    cell.textLabel?.textColor = .white
+                    cell.accessoryType = .checkmark
+                    cell.configureCell(title: title, overview: overview, imageData: photoData)
+                }
+                
+                
+                
+            }
         
         
         //TableView selected cell color
@@ -533,12 +615,125 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+        let row = indexPath.row
+        if let currentItem = viewModel?.getMovieInfo(by: row) {
+            
+            let id = currentItem.id
+            let cell = tableView.cellForRow(at: indexPath) as! MovieTableViewCell
+            
+            if isMovieList {
+                cell.accessoryType = .checkmark
+                cell.tintColor = .black
+                
+                if let check = localFav_2[row] {
+                    localFav_2[row] = nil
+                    localFav[id] = true
+                    movieDict[row] = id
+                    newFavsArray.append(row)
+                } else {
+                    localFav_2[row] = true
+                    localFav[id] = nil
+                    movieDict[row] = nil
+                    newFavsArray.filter {$0 != row}
+                }
+                
+                if cell.tintColor == .black {
+//                        cell.tintColor = .black
+//                        localFav[id] = true
+//                        movieDict[row] = id
+//                        newFavsArray.append(row)
+                    } else {
+//                        cell.tintColor = .clear
+//                        localFav[id] = nil
+//                        movieDict[row] = nil
+//                        newFavsArray.filter {$0 != row}
+                    }
+                }
+            if !isMovieList {
+                
+                cell.accessoryType = .checkmark
+                cell.tintColor = .white
+                
+                tableView.reloadData()
+                
+                if let check = localFav_2[row] {
+                    localFav_2[row] = nil
+                    localFav[id] = true
+                    movieDict[row] = id
+                    newFavsArray.append(row)
+                } else {
+                    localFav_2[row] = true
+                    localFav[id] = nil
+                    movieDict[row] = nil
+                    newFavsArray.filter {$0 != row}
+                }
+                
+                
+            }
+                
+            
+            
+            
+            
+                
+//                if  cell.tintColor == .clear {
+//                    cell.tintColor = .black
+////                    localFav[id] = true
+////                    movieDict[row] = id
+////                    newFavsArray.append(row)
+//                } else {
+//                    cell.tintColor = .clear
+////                    localFav[id] = nil
+////                    movieDict[row] = nil
+////                    newFavsArray.filter {$0 != row}
+//                }
+//            }
+//
+//            if !isMovieList {
+////                if cell.tintColor == .black {
+////                    cell.tintColor = .clear
+////                    localFav[id] = nil
+////                    movieDict[row] = nil
+////                    newFavsArray.filter {$0 != row}
+////                } else {
+////                    cell.tintColor = .clear
+////                    localFav[id] = nil
+////                    movieDict[row] = nil
+////                    newFavsArray.filter {$0 != row}
+////                }
+//            }
+        }
         
+        print("localFav_2: \(localFav_2)")
+//        print("localFav: \(localFav)")
+//        print("movieDict_2: \(movieDict)")
+//        print("newFavsArray: \(newFavsArray)")
         
         
         tableView.deselectRow(at: indexPath, animated: true)
+        DispatchQueue.main.async {
+            tableView.reloadData()
+        }
         
     }
+ 
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
+        }
+    
+    func resetChecks() {
+            for i in 0..<tableView.numberOfSections {
+                for j in 0..<tableView.numberOfRows(inSection: i) {
+                    if let cell = tableView.cellForRow(at: NSIndexPath(row: j, section: i) as IndexPath) {
+                        cell.accessoryType = .none
+                    }
+               }
+           }
+        }
+    
+    
     
 }
 
@@ -546,10 +741,10 @@ extension SecondViewController: ViewControllerDelegate {
    
     func setName(fName: String, lName: String) {
         
-        print("In the setName Method. \n FName: \(fName), LName: \(lName)")
+      //  print("In the setName Method. \n FName: \(fName), LName: \(lName)")
         self.nameLabel.text = "Greetings2: \(lName), \(fName)"
     
-        print("in the delegate method.......")
+  //      print("in the delegate method.......")
         DispatchQueue.main.async { [self] in
             self.nameLabel.text = "Greetings3: \(lName), \(fName)"
         }

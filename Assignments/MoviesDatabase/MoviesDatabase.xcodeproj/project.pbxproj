@@ -20,6 +20,8 @@
 		D3AA25C72809DDA9003EEA5F /* MovieDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D3AA25C52809DDA9003EEA5F /* MovieDB.xcdatamodeld */; };
 		D3AA25C9280B0A5B003EEA5F /* MovieProd.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA25C8280B0A5B003EEA5F /* MovieProd.swift */; };
 		D3AA25CB280D0D6E003EEA5F /* MovieCompany.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA25CA280D0D6E003EEA5F /* MovieCompany.swift */; };
+		D3AA25CD280DF352003EEA5F /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA25CC280DF352003EEA5F /* PaddingLabel.swift */; };
+		D3AA25CF280E11C3003EEA5F /* MovieCustomSingle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3AA25CE280E11C3003EEA5F /* MovieCustomSingle.swift */; };
 		D3B696E528014FA700316BF7 /* EditUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B696E428014FA700316BF7 /* EditUserViewController.swift */; };
 		D3B696E72801C62200316BF7 /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B696E62801C62200316BF7 /* MovieCollectionViewCell.swift */; };
 		D3B696EF2802077F00316BF7 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B696EE2802077F00316BF7 /* Movie.swift */; };
@@ -59,6 +61,8 @@
 		D3AA25C62809DDA9003EEA5F /* MovieDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MovieDB.xcdatamodel; sourceTree = "<group>"; };
 		D3AA25C8280B0A5B003EEA5F /* MovieProd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieProd.swift; sourceTree = "<group>"; };
 		D3AA25CA280D0D6E003EEA5F /* MovieCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCompany.swift; sourceTree = "<group>"; };
+		D3AA25CC280DF352003EEA5F /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
+		D3AA25CE280E11C3003EEA5F /* MovieCustomSingle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCustomSingle.swift; sourceTree = "<group>"; };
 		D3B696E428014FA700316BF7 /* EditUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserViewController.swift; sourceTree = "<group>"; };
 		D3B696E62801C62200316BF7 /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3B696EE2802077F00316BF7 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 				D381AFC52809205900030C08 /* MovieFav.swift */,
 				D3AA25C8280B0A5B003EEA5F /* MovieProd.swift */,
 				D3AA25CA280D0D6E003EEA5F /* MovieCompany.swift */,
+				D3AA25CE280E11C3003EEA5F /* MovieCustomSingle.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 				D3B696E428014FA700316BF7 /* EditUserViewController.swift */,
 				D3B696E62801C62200316BF7 /* MovieCollectionViewCell.swift */,
 				D3B6970928021D4500316BF7 /* ViewControllerConfigurator.swift */,
+				D3AA25CC280DF352003EEA5F /* PaddingLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -290,6 +296,7 @@
 				D381AFC62809205900030C08 /* MovieFav.swift in Sources */,
 				D3B69704280214A700316BF7 /* MovieResponse.swift in Sources */,
 				D30D154A27FCD41F0014AF84 /* ViewController.swift in Sources */,
+				D3AA25CD280DF352003EEA5F /* PaddingLabel.swift in Sources */,
 				D3BFB28027FF6EEF00511E1A /* MovieTableViewCell.swift in Sources */,
 				D30D154627FCD41F0014AF84 /* AppDelegate.swift in Sources */,
 				D3B696F5280209D600316BF7 /* NetworkURLs.swift in Sources */,
@@ -298,6 +305,7 @@
 				D3B6970F2802386900316BF7 /* CDMovie+Utils.swift in Sources */,
 				D3B69702280213DF00316BF7 /* RemoteRepository.swift in Sources */,
 				D381AFC428091D6100030C08 /* MovieResponseAux.swift in Sources */,
+				D3AA25CF280E11C3003EEA5F /* MovieCustomSingle.swift in Sources */,
 				D3B696E528014FA700316BF7 /* EditUserViewController.swift in Sources */,
 				D3B696E72801C62200316BF7 /* MovieCollectionViewCell.swift in Sources */,
 				D3B6971328023F6000316BF7 /* LocalRepository.swift in Sources */,

@@ -16,6 +16,6 @@ struct MovieItem: Codable {
   //  let votes: Int
   //  let voteAvg: Double
   //  let popularity: Int
-    let isFavorite: Bool
+    var isFavorite: Bool
     
 }

@@ -17,29 +17,38 @@ protocol ViewModelProtocol {
     func getMovies()
     func getTitle(by row: Int) -> String?
     func getOverview(by row: Int) -> String?
+    var totalComps: [MovieCompany] {get set}
+    func getProdTitle(by row: Int) -> String? 
 //    func get(by row: Int) -> String?
     func loadMoreMovies()
     func forceUpdate()
     func getImageData(by row: Int) -> Data?
     func getFavsFlag() -> [MovieItem]
-    func searchItem(word: String) -> [Movie]
+    var getFavsFlagArray: [MovieItem]{ get set}
+    
+    
+    func searchItem() -> [Movie]
     var filteredData: [Movie]{ get set }
-    func getMoviesReturn(completionHandler: ()->()) -> [Movie]
+    func getMoviesReturn(completionHandler: @escaping ([Movie])->()) -> [Movie]
     func getMovieCompany(companyID: String)
     func getMovieID(by row: Int) -> Int
+    func getProdImageData(by row: Int) -> Data?
+    func getMovieInfo(by row: Int) -> Movie
 }
 
 class ViewModel: ViewModelProtocol {
+    
+    
     var totalRowsCompany: Int { totalComps.count }
     
 //    var filteredData: [Movie]
-    
+    var getFavsFlagArray = [MovieItem]()
     var filteredData: [Movie] = [Movie]()
 //    var companies = MovieProd()
     
-    func searchItem(word: String) -> [Movie] {
-        
-        return [Movie]()
+    func searchItem() -> [Movie] {
+        print("in the search data method in VM.....")
+        return movies//[Movie]()
     }
 
     
@@ -50,19 +59,27 @@ class ViewModel: ViewModelProtocol {
     }
     
     func getFavsFlag() -> [MovieItem] {
-        //        guard row < movies.count else { return nil }
-        //        let movie = movies[row]
-        var array = [MovieItem]()
-        for item in movies {
-            let id = item.id
-            let isFav = false
-            let title = item.title
+        
+        var i = 0
+
+        if getFavsFlagArray.isEmpty {
+
+            for item in movies {
+                if i >= 3 {break}
+                let id = item.id
+                let isFav = false
+                let title = item.title
+                let current = MovieItem(id: id, title: title, isFavorite: isFav)
+                getFavsFlagArray.append(current)
+                i += 1
+            }
+            print("the array.....\(getFavsFlagArray)")
             
-            let current = MovieItem(id: id, title: title, isFavorite: isFav)
-            array.append(current)
         }
-        print("the array.....\(array)")
-        return array
+        
+       // var array = [MovieItem]()
+       
+        return getFavsFlagArray
     }
     
     var totalRowsProd: Int { movies.count }
@@ -78,7 +95,7 @@ class ViewModel: ViewModelProtocol {
     @Published private(set) var moviesFav = [Movie]()
     private var afterKey = ""
     private var isLoading = false
-    private var totalComps = [MovieCompany]()
+    var totalComps = [MovieCompany]()
     @Published private var photoCache: [Int: Data] = [:]
     
     init(repository: RepositoryProtocol) {
@@ -99,13 +116,14 @@ class ViewModel: ViewModelProtocol {
             }
     }
    
-    func getMoviesReturn(completionHandler: ()->()) -> [Movie]{
+    func getMoviesReturn(completionHandler: @escaping ([Movie])->()) -> [Movie]{
         let movies = [Movie]()
         if movies.isEmpty {
             getMovies(from: createURL(), forceUpdate: true)
         } else {
             self.movies = movies
             }
+        completionHandler(movies)
         return movies
     }
     
@@ -131,33 +149,40 @@ class ViewModel: ViewModelProtocol {
     }
 
     func getMovieCompany(companyID: String) {
+        if totalComps.count > 6 {
+            totalComps = []
+        }
+//
         repository.getMovieCompany(companyID: companyID) { [weak self] result in
             print("company results: \(result)")
+            
+//            
             
             switch result {
             case .success(let comp):
 //                self?.companies = posts
-                print("comp: \(comp.productionCompanies)")
+       //         print("comp: \(comp.productionCompanies)")
                 let item = comp.productionCompanies
                 
               //  totalComps.append(result.map({ $0
                     let companies = item.map { $0 }
                 for parts in companies {
-                    
                     let id = parts.id
-                    
                     if let title = parts.name as? String,  //as? String) ?? ""
                     let imagePath = parts.logoPath as? String
                         {
                         
                         let newItem = MovieCompany(id: id, logoPath: imagePath, name: title, originCountry: "US")
                         self!.totalComps.append(newItem)
-                        print("individual companies: \(self!.totalComps)")
+     //                   print("individual companies: \(self!.totalComps)")
+     //                   print("The title...: \(title)")
                     }
                 
                     
                     
                 }
+
+    //            print("All prod comps printed...: \(self!.totalComps)")
                     
                     //  let movies = response.movie.map { $0 }
                     
@@ -245,6 +270,44 @@ class ViewModel: ViewModelProtocol {
         
     }
     
+    func getProdImageData(by row: Int) -> Data? {
+        
+        var data = Data()
+        let urlBase = NetworkURLs.urlPhotoBase
+   //     guard row < totalComps.count else { return nil }
+        let info = totalComps[row].logoPath
+      //  print("movies count: \(movies.count)")
+        guard let photoData = info else {
+            return Data()
+        }
+        
+        let finalUrl = urlBase + photoData
+        print(finalUrl)
+        
+        guard let url = URL(string: (finalUrl))
+        else { return Data()}
+        
+        do {
+            let data = try Data(contentsOf: url)
+            //data = try Data(contentsOf: url)
+           
+        } catch (let error) {
+            print(error.localizedDescription)
+            
+        }
+        
+        return data
+        
+    }
+
+    
+//    let data = try Data(contentsOf: url)
+//
+//    DispatchQueue.main.async {
+//        self?.movieImageView.image = UIImage(data: data)
+//    }
+    
+    
     func getTitle(by row: Int) -> String? {
         guard row < movies.count else { return nil }
         let movie = movies[row]
@@ -257,6 +320,15 @@ class ViewModel: ViewModelProtocol {
         return movie.id
     }
     
+    func getProdTitle(by row: Int) -> String? {
+        guard row < totalComps.count else { return nil }
+        let movie = totalComps[row]
+        return movie.name
+    }
     
+    func getMovieInfo(by row: Int) -> Movie {
+        let movie = movies[row]
+        return movie
+    }
 
 }

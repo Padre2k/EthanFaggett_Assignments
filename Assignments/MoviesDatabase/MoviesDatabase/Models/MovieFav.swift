@@ -18,7 +18,7 @@ struct MovieFav: Codable {
     let release_date: String
     let poster_path: String?
     let overview: String
-    let isFavorite: Bool
+    var isFavorite: Bool
     
     enum CodingKeys: String, CodingKey {
         
