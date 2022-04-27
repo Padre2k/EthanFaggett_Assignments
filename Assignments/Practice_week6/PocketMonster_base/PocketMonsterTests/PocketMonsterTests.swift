@@ -31,7 +31,7 @@ class PocketMonsterTests: XCTestCase {
     @MainActor func testGetPokemons_Success() async throws {
         //Given
         let fakeNetworkManager = FakeNetworkManager()
-        let data = await try getDataFrom(jsonFile: "PokemonResponse")
+        let data = try await getDataFrom(jsonFile: "PokemonResponse")
         fakeNetworkManager.data = data
       //  let remote = RemoteRepository(networkManager: fakeNetworkManager)
       //  let repository = Repository(remote: remote, local: nil)
@@ -41,7 +41,7 @@ class PocketMonsterTests: XCTestCase {
         
         //When
         do {
-            await try viewModel.loadPokemons()
+            try await viewModel.loadPokemons()
             viewModel
                 .$pokemons
                 .sink { result in
@@ -60,7 +60,7 @@ class PocketMonsterTests: XCTestCase {
         //Then
         waitForExpectations(timeout: 2.0)
         XCTAssertEqual(pokemons.count, 100)
-        XCTAssertTrue(pokemons.first?.name == "These are Ukrainian refugees after cleaning up a park in Poland as a thank you for hosting them. They're organising these things all over Poland now")
+        XCTAssertTrue(pokemons.first?.name == "bulbasaur")
     }
 
 
