@@ -9,6 +9,11 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    var getFakeImageData = {
+        
+        
+    }
+    
     // MARK: - UI Elements
     private lazy var button: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.roundedRect, primaryAction: action1)
@@ -107,7 +112,7 @@ class ViewController: UIViewController {
         view.addSubview(apiImageView)
         
         // create constraints
-        let safeArea = view.safeAreaLayoutGuide
+//        let safeArea = view.safeAreaLayoutGuide
         
         button.heightAnchor.constraint(equalToConstant: 35.0).isActive = true
         button.widthAnchor.constraint(equalToConstant: 120).isActive = true
@@ -145,6 +150,8 @@ class ViewController: UIViewController {
         }
     }
 
+    
+    
 }
 
 extension UIImage {

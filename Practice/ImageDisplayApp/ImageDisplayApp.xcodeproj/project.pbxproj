@@ -7,13 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D35A44A22817A43C003FCD28 /* ImageDisplayAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A44A12817A43C003FCD28 /* ImageDisplayAppTests.swift */; };
+		D35A44AA2817AF3E003FCD28 /* ImageAppValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35A44A92817AF3E003FCD28 /* ImageAppValidator.swift */; };
 		D3C9054D27F336F000CADB91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C9054C27F336F000CADB91 /* AppDelegate.swift */; };
 		D3C9054F27F336F000CADB91 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C9054E27F336F000CADB91 /* SceneDelegate.swift */; };
 		D3C9055127F336F000CADB91 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C9055027F336F000CADB91 /* ViewController.swift */; };
 		D3C9055627F336F100CADB91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3C9055527F336F100CADB91 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D35A44A32817A43C003FCD28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D3C9054127F336F000CADB91 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D3C9054827F336F000CADB91;
+			remoteInfo = ImageDisplayApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		D35A449F2817A43C003FCD28 /* ImageDisplayAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageDisplayAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D35A44A12817A43C003FCD28 /* ImageDisplayAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDisplayAppTests.swift; sourceTree = "<group>"; };
+		D35A44A92817AF3E003FCD28 /* ImageAppValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAppValidator.swift; sourceTree = "<group>"; };
 		D3C9054927F336F000CADB91 /* ImageDisplayApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageDisplayApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3C9054C27F336F000CADB91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D3C9054E27F336F000CADB91 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -23,6 +38,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D35A449C2817A43C003FCD28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D3C9054627F336F000CADB91 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,10 +55,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D35A44A02817A43C003FCD28 /* ImageDisplayAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				D35A44A12817A43C003FCD28 /* ImageDisplayAppTests.swift */,
+			);
+			path = ImageDisplayAppTests;
+			sourceTree = "<group>";
+		};
 		D3C9054027F336F000CADB91 = {
 			isa = PBXGroup;
 			children = (
 				D3C9054B27F336F000CADB91 /* ImageDisplayApp */,
+				D35A44A02817A43C003FCD28 /* ImageDisplayAppTests */,
 				D3C9054A27F336F000CADB91 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				D3C9054927F336F000CADB91 /* ImageDisplayApp.app */,
+				D35A449F2817A43C003FCD28 /* ImageDisplayAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -57,6 +89,7 @@
 				D3C9055027F336F000CADB91 /* ViewController.swift */,
 				D3C9055527F336F100CADB91 /* Assets.xcassets */,
 				D3C9055A27F336F100CADB91 /* Info.plist */,
+				D35A44A92817AF3E003FCD28 /* ImageAppValidator.swift */,
 			);
 			path = ImageDisplayApp;
 			sourceTree = "<group>";
@@ -64,6 +97,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D35A449E2817A43C003FCD28 /* ImageDisplayAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D35A44A52817A43C003FCD28 /* Build configuration list for PBXNativeTarget "ImageDisplayAppTests" */;
+			buildPhases = (
+				D35A449B2817A43C003FCD28 /* Sources */,
+				D35A449C2817A43C003FCD28 /* Frameworks */,
+				D35A449D2817A43C003FCD28 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D35A44A42817A43C003FCD28 /* PBXTargetDependency */,
+			);
+			name = ImageDisplayAppTests;
+			productName = ImageDisplayAppTests;
+			productReference = D35A449F2817A43C003FCD28 /* ImageDisplayAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D3C9054827F336F000CADB91 /* ImageDisplayApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D3C9055D27F336F100CADB91 /* Build configuration list for PBXNativeTarget "ImageDisplayApp" */;
@@ -91,6 +142,10 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
+					D35A449E2817A43C003FCD28 = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = D3C9054827F336F000CADB91;
+					};
 					D3C9054827F336F000CADB91 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
@@ -110,11 +165,19 @@
 			projectRoot = "";
 			targets = (
 				D3C9054827F336F000CADB91 /* ImageDisplayApp */,
+				D35A449E2817A43C003FCD28 /* ImageDisplayAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D35A449D2817A43C003FCD28 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D3C9054727F336F000CADB91 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -126,10 +189,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D35A449B2817A43C003FCD28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D35A44A22817A43C003FCD28 /* ImageDisplayAppTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D3C9054527F336F000CADB91 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D35A44AA2817AF3E003FCD28 /* ImageAppValidator.swift in Sources */,
 				D3C9055127F336F000CADB91 /* ViewController.swift in Sources */,
 				D3C9054D27F336F000CADB91 /* AppDelegate.swift in Sources */,
 				D3C9054F27F336F000CADB91 /* SceneDelegate.swift in Sources */,
@@ -138,7 +210,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		D35A44A42817A43C003FCD28 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D3C9054827F336F000CADB91 /* ImageDisplayApp */;
+			targetProxy = D35A44A32817A43C003FCD28 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		D35A44A62817A43C003FCD28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A96K22M226;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.efaggett..ImageDisplayAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageDisplayApp.app/ImageDisplayApp";
+			};
+			name = Debug;
+		};
+		D35A44A72817A43C003FCD28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A96K22M226;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.efaggett..ImageDisplayAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ImageDisplayApp.app/ImageDisplayApp";
+			};
+			name = Release;
+		};
 		D3C9055B27F336F100CADB91 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -312,6 +428,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D35A44A52817A43C003FCD28 /* Build configuration list for PBXNativeTarget "ImageDisplayAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D35A44A62817A43C003FCD28 /* Debug */,
+				D35A44A72817A43C003FCD28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D3C9054427F336F000CADB91 /* Build configuration list for PBXProject "ImageDisplayApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
