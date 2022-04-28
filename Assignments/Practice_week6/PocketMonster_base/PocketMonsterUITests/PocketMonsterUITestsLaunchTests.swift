@@ -43,10 +43,24 @@ class PocketMonsterUITestsLaunchTests: XCTestCase {
         XCTAssertTrue(firstelement.exists)
                        
 //        let searchField = app.searchFields
-        let searchQuery = app.searchFields
-        let searchFields = searchQuery["searchText"]
-        XCTAssertTrue(searchFields.exists)
+//        let searchQuery = app.searchFields
+//        let searchFields = searchQuery["searchText"]
+//        XCTAssertTrue(searchFields.exists)
 //
+        let theSearchField = app.searchFields  //searchFields()[""]
+        XCTAssertTrue(theSearchField.element.exists)
+        theSearchField.element.tap()
         
+        
+    }
+    
+    func testImageLoad() {
+        
+        let app = XCUIApplication()
+        app.launch()
+
+        
+        let images = app.scrollViews["Pokemon"].children(matching: .image)
+        XCTAssertTrue(images.element.exists)
     }
 }
