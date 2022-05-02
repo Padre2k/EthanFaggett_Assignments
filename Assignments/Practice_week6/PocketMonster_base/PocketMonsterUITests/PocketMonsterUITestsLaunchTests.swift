@@ -62,5 +62,37 @@ class PocketMonsterUITestsLaunchTests: XCTestCase {
         
         let images = app.scrollViews["Pokemon"].children(matching: .image)
         XCTAssertTrue(images.element.exists)
+        
+        let pokedexNavigationBar = app.navigationBars["PokeDex"]
+        XCTAssertTrue(pokedexNavigationBar.exists)
     }
+    
+    
+    func testExample() throws {
+       
+        
+        let app = XCUIApplication()
+      
+        app.windows.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .image).element.tap()
+        
+        let ivysaurStaticText = app.staticTexts["ivysaur"]
+        ivysaurStaticText.tap()
+        ivysaurStaticText.tap()
+        app.staticTexts["Abilities"].tap()
+        app.navigationBars["_TtGC7SwiftUI19UIHosting"].buttons["PokeDex"].tap()
+        
+        let pokedexNavigationBar = app.navigationBars["PokeDex"]
+        let searchPokemonSearchField = pokedexNavigationBar.searchFields["Search pokemon"]
+        searchPokemonSearchField.tap()
+        searchPokemonSearchField.tap()
+        app.tables.cells["Ivysaur"].children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+        app.children(matching: .window).element(boundBy: 0).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.children(matching: .image).element.tap()
+        pokedexNavigationBar.buttons["PokeDex"].tap()
+        searchPokemonSearchField.tap()
+        pokedexNavigationBar.buttons["Cancel"].tap()
+                
+    
+    }
+    
+    
 }
